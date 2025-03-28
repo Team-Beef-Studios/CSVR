@@ -49,7 +49,6 @@ android {
             isMinifyEnabled = false
             isShrinkResources = false
             isDebuggable = true
-            applicationIdSuffix = ".test"
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
@@ -61,15 +60,6 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
-        }
-
-        register("asan") {
-            initWith(getByName("debug"))
-        }
-
-        register("continuous") {
-            initWith(getByName("release"))
-            applicationIdSuffix = ".test"
         }
     }
 

@@ -21,6 +21,8 @@ public class XashActivity extends SDLActivity {
     private String mPackageName;
     private static final String TAG = "XashActivity";
 
+    private static final int PERMISSION_CODE = 16;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +41,18 @@ public class XashActivity extends SDLActivity {
         };
         for (String permission : permissions) {
             if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(permissions, 1);
+                requestPermissions(permissions, PERMISSION_CODE);
                 return;
             }
         }
         new File("/sdcard/xash").mkdir();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == PERMISSION_CODE) {
+            System.exit(0);
+        }
     }
 
     @Override
