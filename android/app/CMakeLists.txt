@@ -31,8 +31,8 @@ set(WAF_CC "${CMAKE_C_COMPILER} --target=${CMAKE_C_COMPILER_TARGET}")
 set(WAF_CXX "${CMAKE_CXX_COMPILER} --target=${CMAKE_CXX_COMPILER_TARGET}")
 
 # not cleanest way to get upper directory
-set(DEPENDENCY_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../3rdparty/")
-set(ENGINE_SOURCE_DIR "${DEPENDENCY_SOURCE_DIR}/xash3d-fwgs")
+set(CLIENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../")
+set(ENGINE_SOURCE_DIR "${CLIENT_SOURCE_DIR}/3rdparty/xash3d-fwgs")
 
 execute_process(
 	COMMAND ${CMAKE_COMMAND} -E env
@@ -44,7 +44,7 @@ execute_process(
 	WORKING_DIRECTORY "${ENGINE_SOURCE_DIR}"
 )
 
-add_subdirectory("${DEPENDENCY_SOURCE_DIR}/hlsdk-portable" hlsdk-portable)
+add_subdirectory("${CLIENT_SOURCE_DIR}" cs16)
 
 # try to build minimal SDL. Enable features as we're gonna use them
 set(SDL_RENDER OFF)
@@ -56,6 +56,5 @@ set(SDL_DUMMYVIDEO OFF)
 set(SDL_VULKAN OFF)
 set(SDL_OFFSCREEN OFF)
 set(SDL_STATIC OFF)
-add_subdirectory("${DEPENDENCY_SOURCE_DIR}/SDL" SDL)
+add_subdirectory("${CLIENT_SOURCE_DIR}/3rdparty/SDL" SDL)
 add_subdirectory("${ENGINE_SOURCE_DIR}/" xash3d-fwgs)
-add_subdirectory("${ENGINE_SOURCE_DIR}/3rdparty/mainui" mainui)

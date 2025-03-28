@@ -13,9 +13,6 @@
 [submodule "3rdparty/xash3d-fwgs"]
 	path = 3rdparty/xash3d-fwgs
 	url = https://github.com/Velaron/xash3d-fwgs
-[submodule "3rdparty/hlsdk-portable"]
-	path = 3rdparty/hlsdk-portable
-	url = https://github.com/FWGS/hlsdk-portable
 [submodule "3rdparty/SDL"]
 	path = 3rdparty/SDL
 	url = https://github.com/libsdl-org/SDL
