@@ -1,5 +1,4 @@
-package su.xash.engine;
-
+package com.lvonasek.csvr;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
@@ -144,7 +143,6 @@ public class XashActivity extends SDLActivity {
         return getWindow().superDispatchKeyEvent(event);
     }
 
-    // TODO: REMOVE LATER, temporary launchers support?
     @Override
     protected String[] getArguments() {
         String gamedir = getIntent().getStringExtra("gamedir");

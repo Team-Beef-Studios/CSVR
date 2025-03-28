@@ -1,4 +1,4 @@
-package su.xash.engine;
+package com.lvonasek.csvr;
 
 import android.app.Activity;
 import android.graphics.Rect;

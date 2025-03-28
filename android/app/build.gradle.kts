@@ -8,14 +8,12 @@ plugins {
 }
 
 android {
-    namespace = "su.xash.engine"
+    namespace = "com.lvonasek.csvr"
     ndkVersion = "27.2.12479018"
 
     defaultConfig {
-        applicationId = "su.xash"
-        applicationIdSuffix = "engine"
-        versionName = "0.21"
-        versionCode = getBuildNum()
+        applicationId = "com.lvonasek"
+        applicationIdSuffix = "csvr"
         minSdk = 26
         targetSdk = 26
         compileSdk = 34
@@ -93,12 +91,4 @@ android {
 
 dependencies {
     implementation("ch.acra:acra-http:5.11.2")
-}
-
-fun getBuildNum(): Int {
-    val now = LocalDateTime.now()
-    val releaseDate = LocalDateTime.of(2015, Month.APRIL, 1, 0, 0, 0)
-    val qBuildNum = releaseDate.until(now, ChronoUnit.DAYS)
-    val minuteOfDay = now.hour * 60 + now.minute
-    return (qBuildNum * 10000 + minuteOfDay).toInt()
 }
