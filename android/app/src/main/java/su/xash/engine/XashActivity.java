@@ -1,7 +1,9 @@
 package su.xash.engine;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +13,8 @@ import android.view.KeyEvent;
 import android.view.WindowManager;
 
 import org.libsdl.app.SDLActivity;
+
+import java.io.File;
 
 public class XashActivity extends SDLActivity {
     private boolean mUseVolumeKeys;
@@ -28,6 +32,18 @@ public class XashActivity extends SDLActivity {
         }
 
         AndroidBug5497Workaround.assistActivity(this);
+
+        String[] permissions = {
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+        };
+        for (String permission : permissions) {
+            if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(permissions, 1);
+                return;
+            }
+        }
+        new File("/sdcard/xash").mkdir();
     }
 
     @Override

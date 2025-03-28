@@ -12,7 +12,7 @@
 	url = https://github.com/FWGS/MiniUTL
 [submodule "3rdparty/xash3d-fwgs"]
 	path = 3rdparty/xash3d-fwgs
-	url = https://github.com/Velaron/xash3d-fwgs
+	url = https://github.com/lvonasek/xash3d-fwgs
 [submodule "3rdparty/SDL"]
 	path = 3rdparty/SDL
 	url = https://github.com/libsdl-org/SDL

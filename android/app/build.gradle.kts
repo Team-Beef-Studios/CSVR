@@ -16,8 +16,8 @@ android {
         applicationIdSuffix = "engine"
         versionName = "0.21"
         versionCode = getBuildNum()
-        minSdk = 21
-        targetSdk = 29
+        minSdk = 26
+        targetSdk = 26
         compileSdk = 34
 
         externalNativeBuild {
