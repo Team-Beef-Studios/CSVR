@@ -88,7 +88,3 @@ android {
         }
     }
 }
-
-dependencies {
-    implementation("ch.acra:acra-http:5.11.2")
-}
