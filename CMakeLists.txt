@@ -60,6 +60,10 @@ if(BUILD_MAINUI)
 	add_subdirectory(3rdparty/mainui_cpp)
 endif()
 
+if(ANDROID)
+    add_subdirectory(3rdparty/OpenXR-SDK)
+endif()
+
 include(GenerateExtras)
 
 if(WIN32)
