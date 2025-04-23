@@ -1,7 +1,3 @@
-import java.time.LocalDateTime
-import java.time.Month
-import java.time.temporal.ChronoUnit
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
