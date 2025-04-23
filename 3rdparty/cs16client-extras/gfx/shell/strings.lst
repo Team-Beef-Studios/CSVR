@@ -11,7 +11,7 @@
 398	"If the server allows it, this option will help you aim at enemies."
 391	"Check this box and enter password to disable visuals inappropriate for younger players and multiplayer.  Anyone wishing to change this setting will need to use this password. IMPORTANT NOTE:  If this is turned on Counter-Strike will not be playable."
 400	"Read the official Counter-Strike Manual, learn how to play."
-402	"cstrike\manual\manual.htm"
+402	"https://developer.valvesoftware.com/wiki/Counter-Strike"
 416	"Visit Counter-Strike.net"
 417	"www.counter-strike.net"
 426	"Get the latest updates, official news, and see the entire CS Network!"
