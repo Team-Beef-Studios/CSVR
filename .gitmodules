@@ -16,6 +16,3 @@
 [submodule "3rdparty/SDL"]
 	path = 3rdparty/SDL
 	url = https://github.com/libsdl-org/SDL
-[submodule "3rdparty/OpenXR-SDK"]
-	path = 3rdparty/OpenXR-SDK
-	url = https://github.com/KhronosGroup/OpenXR-SDK.git
