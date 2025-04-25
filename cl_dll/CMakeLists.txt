@@ -12,6 +12,7 @@ file(GLOB CS_STUDIO_SRC "studio/*.cpp")
 file(GLOB CS_INPUT_SRC "input/*.cpp")
 file(GLOB CS_PM_SRC "../pm_shared/*.cpp")
 file(GLOB CS_GAMSH_SRC "../game_shared/*.cpp")
+file(GLOB LV_VR_SRC "vr/*.c")
 file(GLOB MINIUTL_SRC "../3rdparty/mainui_cpp/miniutl/*.cpp")
 
 list(REMOVE_ITEM CS_CLIENT_SRC "${CMAKE_CURRENT_SOURCE_DIR}/ev_hldm.cpp")
@@ -28,6 +29,7 @@ list(APPEND CS_CLIENT_SRC ${CS_STUDIO_SRC})
 list(APPEND CS_CLIENT_SRC ${CS_PM_SRC})
 list(APPEND CS_CLIENT_SRC ${CS_INPUT_SRC})
 list(APPEND CS_CLIENT_SRC ${CS_GAMSH_SRC})
+list(APPEND CS_CLIENT_SRC ${LV_VR_SRC})
 list(APPEND CS_CLIENT_SRC ${MINIUTL_SRC})
 
 include_directories(
@@ -35,6 +37,7 @@ include_directories(
 	include/hud
 	include/studio
 	include/math
+	vr
 	../cl_dll
 	../common
 	../engine
@@ -46,7 +49,8 @@ include_directories(
 	../3rdparty/mainui_cpp
 	../3rdparty/mainui_cpp/controls
 	../3rdparty/mainui_cpp/menus
-	../3rdparty/mainui_cpp/miniutl)
+	../3rdparty/mainui_cpp/miniutl
+	../3rdparty/OpenXR-SDK/include)
 
 add_definitions(-DCLIENT_WEAPONS -DCLIENT_DLL)
 
@@ -58,6 +62,8 @@ else()
 endif()
 
 add_library(${CLIENT_LIB} SHARED ${CS_CLIENT_SRC})
+
+target_link_libraries(${CLIENT_LIB} PRIVATE openxr_loader log EGL GLESv3)
 
 set_target_postfix(${CLIENT_LIB})
 
