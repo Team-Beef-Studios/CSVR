@@ -38,12 +38,6 @@ void VR_Init( void* system, const char* name, int version ) {
 	extensions[extensionsCount++] = XR_KHR_COMPOSITION_LAYER_CYLINDER_EXTENSION_NAME;
 #ifdef ANDROID
 	extensions[extensionsCount++] = XR_KHR_OPENGL_ES_ENABLE_EXTENSION_NAME;
-	if (VR_GetPlatformFlag(VR_PLATFORM_EXTENSION_FOVEATION)) {
-		extensions[extensionsCount++] = XR_FB_SWAPCHAIN_UPDATE_STATE_EXTENSION_NAME;
-		extensions[extensionsCount++] = XR_FB_SWAPCHAIN_UPDATE_STATE_OPENGL_ES_EXTENSION_NAME;
-		extensions[extensionsCount++] = XR_FB_FOVEATION_EXTENSION_NAME;
-		extensions[extensionsCount++] = XR_FB_FOVEATION_CONFIGURATION_EXTENSION_NAME;
-	}
 	if (VR_GetPlatformFlag(VR_PLATFORM_EXTENSION_INSTANCE)) {
 		extensions[extensionsCount++] = XR_KHR_ANDROID_CREATE_INSTANCE_EXTENSION_NAME;
 	}

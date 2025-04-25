@@ -220,11 +220,6 @@ void VR_InitRenderer( engine_t* engine, bool multiview ) {
 
 	int msaa = VR_GetConfig(VR_CONFIG_VIEWPORT_MSAA);
 	ovrRenderer_Create(engine->appState.Session, &engine->appState.Renderer, multiview, eyeW, eyeH, msaa > 0 ? msaa : 1);
-#ifdef ANDROID
-	if (VR_GetPlatformFlag(VR_PLATFORM_EXTENSION_FOVEATION)) {
-		ovrRenderer_SetFoveation(&engine->appState.Instance, &engine->appState.Session, &engine->appState.Renderer, XR_FOVEATION_LEVEL_HIGH_FB, 0, XR_FOVEATION_DYNAMIC_LEVEL_ENABLED_FB);
-	}
-#endif
 	initialized = true;
 }
 
@@ -343,7 +338,8 @@ void VR_FinishFrame( engine_t* engine ) {
 		VR_SetConfigFloat(VR_CONFIG_MENU_YAW, XrQuaternionf_ToEulerAngles(projections[0].pose.orientation).y);
 
 		for (int eye = 0; eye < ovrMaxNumEyes; eye++) {
-			ovrFramebuffer* frameBuffer = &engine->appState.Renderer.FrameBuffer;
+			int imageLayer = engine->appState.Renderer.Multiview ? eye : 0;
+			ovrFramebuffer* frameBuffer = &engine->appState.Renderer.FrameBuffer[imageLayer];
 			memset(&projection_layer_elements[eye], 0, sizeof(XrCompositionLayerProjectionView));
 			projection_layer_elements[eye].type = XR_TYPE_COMPOSITION_LAYER_PROJECTION_VIEW;
 			projection_layer_elements[eye].pose = projections[eye].pose;
@@ -355,7 +351,7 @@ void VR_FinishFrame( engine_t* engine ) {
 			projection_layer_elements[eye].subImage.imageRect.offset.y = 0;
 			projection_layer_elements[eye].subImage.imageRect.extent.width = frameBuffer->ColorSwapChain.Width;
 			projection_layer_elements[eye].subImage.imageRect.extent.height = frameBuffer->ColorSwapChain.Height;
-			projection_layer_elements[eye].subImage.imageArrayIndex = vrMode == VR_MODE_MONO_6DOF ? 0 : eye;
+			projection_layer_elements[eye].subImage.imageArrayIndex = vrMode == VR_MODE_MONO_6DOF ? 0 : imageLayer;
 		}
 
 		XrCompositionLayerProjection projection_layer = {};
@@ -385,9 +381,9 @@ void VR_FinishFrame( engine_t* engine ) {
 		memset(&cylinder_layer.subImage, 0, sizeof(XrSwapchainSubImage));
 		cylinder_layer.subImage.imageRect.offset.x = 0;
 		cylinder_layer.subImage.imageRect.offset.y = 0;
-		cylinder_layer.subImage.imageRect.extent.width = engine->appState.Renderer.FrameBuffer.ColorSwapChain.Width;
-		cylinder_layer.subImage.imageRect.extent.height = engine->appState.Renderer.FrameBuffer.ColorSwapChain.Height;
-		cylinder_layer.subImage.swapchain = engine->appState.Renderer.FrameBuffer.ColorSwapChain.Handle;
+		cylinder_layer.subImage.imageRect.extent.width = engine->appState.Renderer.FrameBuffer[0].ColorSwapChain.Width;
+		cylinder_layer.subImage.imageRect.extent.height = engine->appState.Renderer.FrameBuffer[0].ColorSwapChain.Height;
+		cylinder_layer.subImage.swapchain = engine->appState.Renderer.FrameBuffer[0].ColorSwapChain.Handle;
 		cylinder_layer.subImage.imageArrayIndex = 0;
 		cylinder_layer.pose.orientation = yaw;
 		cylinder_layer.pose.position = pos;
@@ -399,11 +395,17 @@ void VR_FinishFrame( engine_t* engine ) {
 		if (vrMode == VR_MODE_MONO_SCREEN) {
 			cylinder_layer.eyeVisibility = XR_EYE_VISIBILITY_BOTH;
 			layerUnion[layerCount++].Cylinder = cylinder_layer;
+		} else if (engine->appState.Renderer.Multiview) {
+			cylinder_layer.eyeVisibility = XR_EYE_VISIBILITY_LEFT;
+			layerUnion[layerCount++].Cylinder = cylinder_layer;
+			cylinder_layer.eyeVisibility = XR_EYE_VISIBILITY_RIGHT;
+			cylinder_layer.subImage.imageArrayIndex = 1;
+			layerUnion[layerCount++].Cylinder = cylinder_layer;
 		} else {
 			cylinder_layer.eyeVisibility = XR_EYE_VISIBILITY_LEFT;
 			layerUnion[layerCount++].Cylinder = cylinder_layer;
 			cylinder_layer.eyeVisibility = XR_EYE_VISIBILITY_RIGHT;
-			cylinder_layer.subImage.imageArrayIndex = 0;
+			cylinder_layer.subImage.swapchain = engine->appState.Renderer.FrameBuffer[1].ColorSwapChain.Handle;
 			layerUnion[layerCount++].Cylinder = cylinder_layer;
 		}
 	} else {
