@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 
@@ -99,20 +98,7 @@ public class XashActivity extends SDLActivity {
     }
 
     private AssetManager getAssets(boolean isEngine) {
-        AssetManager am = null;
-
-        if (isEngine) {
-            am = getAssets();
-        } else {
-            try {
-                am = getPackageManager().getResourcesForApplication(getCallingPackage()).getAssets();
-            } catch (Exception e) {
-                Log.e(TAG, "Unable to load mod assets!");
-                e.printStackTrace();
-            }
-        }
-
-        return am;
+        return getAssets();
     }
 
     private String[] getAssetsList(boolean isEngine, String path) {
