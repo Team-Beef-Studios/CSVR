@@ -48,6 +48,7 @@ public class XashActivity extends SDLActivity {
             }
         }
         new File("/sdcard/xash").mkdir();
+        nativeSetenv("xr_manufacturer", Build.MANUFACTURER.toUpperCase());
     }
 
     @Override
