@@ -37,8 +37,6 @@ public class XashActivity extends SDLActivity {
             getWindow().getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         }
 
-        AndroidBug5497Workaround.assistActivity(this);
-
         String[] permissions = {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
