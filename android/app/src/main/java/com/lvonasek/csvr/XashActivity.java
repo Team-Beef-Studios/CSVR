@@ -165,6 +165,7 @@ public class XashActivity extends SDLActivity {
             if (!url.startsWith("http://") && !url.startsWith("https://"))
                 url = "http://" + url;
             activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+            activity.finish();
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
