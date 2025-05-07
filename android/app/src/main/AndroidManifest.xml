@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:allowAudioPlaybackCapture="true"
     android:installLocation="preferExternal"
-    android:versionCode="3"
-    android:versionName="0.0.3"
+    android:versionCode="4"
+    android:versionName="0.0.4"
     tools:targetApi="q">
     <!-- OpenGL ES 3.1. -->
     <uses-feature android:glEsVersion="0x00030001" android:required="true"/>
