@@ -10,12 +10,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 
 import org.libsdl.app.SDLActivity;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 public class XashActivity extends SDLActivity {
     private static Activity activity;
@@ -47,7 +50,39 @@ public class XashActivity extends SDLActivity {
                 return;
             }
         }
-        new File("/sdcard/xash").mkdir();
+
+        // Prepare root directory
+        File root = new File("/sdcard/xash");
+        root.mkdir();
+        try {
+            new File(root, ".nomedia").createNewFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Copy custom weapon models
+        File models = new File(root, "cstrike/models");
+        if (!new File(models, "nocopy").exists()) {
+            for (String model : getAssetsList(false, "models")) {
+                try {
+                    InputStream in = getAssets(false).open("models/" + model);
+                    FileOutputStream out = new FileOutputStream(new File(models, model));
+                    byte[] buf = new byte[1024];
+                    while (true) {
+                        int count = in.read(buf);
+                        if (count <= 0) {
+                            break;
+                        }
+                        out.write(buf, 0, count);
+                    }
+                    out.close();
+                    in.close();
+                    Log.d("CSVR", "Model " + model + " unpacked");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         nativeSetenv("xr_manufacturer", Build.MANUFACTURER.toUpperCase());
     }
 

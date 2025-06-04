@@ -185,7 +185,7 @@ void CHudRadar::InitHUDData( void )
 
 int CHudRadar::VidInit(void)
 {
-	bUseRenderAPI = g_iXash && InitBuiltinTextures();
+	bUseRenderAPI = false; //g_iXash && InitBuiltinTextures();
 
 	m_hRadar.SetSpriteByName( "radar" );
 	m_hRadarOpaque.SetSpriteByName( "radaropaque" );

@@ -1,0 +1,60 @@
+[
+	{
+		"name": "Counter-Strike",
+		"app_id": 10,
+		"gamedir": "cstrike",
+		"depots": [
+			{
+				"name": "Base Goldsrc Shared Content",
+				"depot_id": 1
+			},
+			{
+				"name": "Counter-Strike Base Content",
+				"depot_id": 11
+			},
+			{
+				"name": "Condition Zero Models",
+				"depot_id": 95
+			}
+		],
+		"package_name": "in.celest.xash3d.cs16client"
+	},
+	{
+		"name": "Counter-Strike: Condition Zero",
+		"app_id": 80,
+		"gamedir": "czero",
+		"depots": [
+			{
+				"name": "Base Goldsrc Shared Content",
+				"depot_id": 1
+			},
+			{
+				"name": "Counter-Strike Base Content",
+				"depot_id": 11
+			},
+			{
+				"name": "Condition Zero Base Contentt",
+				"depot_id": 81
+			}
+		]
+	},
+	{
+		"name": "Counter-Strike: Condition Zero Deleted Scenes",
+		"app_id": 100,
+		"gamedir": "czeror",
+		"depots": [
+			{
+				"name": "Base Goldsrc Shared Content",
+				"depot_id": 1
+			},
+			{
+				"name": "Counter-Strike Base Content",
+				"depot_id": 11
+			},
+			{
+				"name": "Condition Zero Deleted Scenes Base Content",
+				"depot_id": 101
+			}
+		]
+	}
+]

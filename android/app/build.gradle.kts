@@ -59,7 +59,7 @@ android {
 
     sourceSets {
         getByName("main") {
-            assets.srcDirs("../../3rdparty/xash3d-fwgs/3rdparty/extras/xash-extras", "../../3rdparty/cs16client-extras", "../moddb")
+            assets.srcDirs("../../3rdparty/xash3d-fwgs/3rdparty/extras/xash-extras", "../../3rdparty/cs16client-extras")
             java.srcDir("../../3rdparty/SDL/android-project/app/src/main/java")
             jniLibs.srcDirs("../../3rdparty/xash3d-fwgs/3rdparty/openxr/lib/android")
         }
