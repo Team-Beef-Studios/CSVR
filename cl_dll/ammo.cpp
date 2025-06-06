@@ -1503,6 +1503,8 @@ void CHudAmmo::DrawCrosshair( int weaponId )
 	/* calculate the coordinates */
 	center_x = ( ScreenWidth / 2 ) * gHUD.m_flScale;
 	center_y = ( ScreenHeight / 2 ) * gHUD.m_flScale;
+	center_x *= 1.0f + gEngfuncs.pfnGetCvarFloat("vr_xhair_x");
+	center_y *= 1.0f - gEngfuncs.pfnGetCvarFloat("vr_xhair_y");
 
 	gap = ScaleForRes( GetCrosshairGap( weaponId ), ScreenHeight * gHUD.m_flScale );
 	length = ScaleForRes( xhair_size->value, ScreenHeight * gHUD.m_flScale );
