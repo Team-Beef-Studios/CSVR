@@ -398,12 +398,13 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 
 		// Pivot point offset
 		float fwd = scale * pivot_fwd;
-		float up = scale * (sin(DEG2RAD(angles[ROLL])) + sin(DEG2RAD(pitch))) * pivot_up;
+		float upY = scale * sin(DEG2RAD(pitch)) * pivot_up;
+		float upR = scale * sin(DEG2RAD(angles[ROLL])) * pivot_up;
 		float side = scale * (cos(DEG2RAD(angles[ROLL])) * pivot_side + offset);
 		float rightHanded = gEngfuncs.pfnGetCvarFloat("cl_righthand") * 2.0f - 1.0f;
 		modelpos[0] += fwd * cos(DEG2RAD(yaw)) - side * sin(DEG2RAD(yaw)) * rightHanded;
 		modelpos[1] += fwd * sin(DEG2RAD(yaw)) + side * cos(DEG2RAD(yaw)) * rightHanded;
-		modelpos[2] += up * rightHanded + scale * offset;
+		modelpos[2] += upY + upR * rightHanded + scale * offset;
 
 		// Pivot point YAW correction
 		float hmdYaw = gEngfuncs.pfnGetCvarFloat("vr_hmd_yaw");
