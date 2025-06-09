@@ -380,6 +380,35 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 	angles[PITCH] = m_pCurrentEntity->curstate.angles[PITCH];
 	angles[YAW] = m_pCurrentEntity->curstate.angles[YAW];
 
+	// VR weapon transform
+	char* prefix = "models/v_";
+	char* modelname = m_pCurrentEntity->model->name;
+	if (strncmp(modelname, prefix, strlen(prefix)) == 0)
+	{
+		float yaw = gEngfuncs.pfnGetCvarFloat("vr_player_yaw");
+		float scale = gEngfuncs.pfnGetCvarFloat("vr_worldscale");
+		angles[ROLL] += gEngfuncs.pfnGetCvarFloat("vr_weapon_roll");
+
+		// Pivot point offset
+		float fwd = scale * -0.4f;
+		float up = scale * sin(DEG2RAD(angles[ROLL])) * 0.25f;
+		float side = scale * (cos(DEG2RAD(angles[ROLL])) * 0.1f + 0.07f);
+		bool rightHanded = gEngfuncs.pfnGetCvarFloat("cl_righthand") > 0;
+		modelpos[0] -= side * sin(DEG2RAD(yaw)) * (rightHanded ? 1.0f : -1.0f);
+		modelpos[1] += side * cos(DEG2RAD(yaw)) * (rightHanded ? 1.0f : -1.0f);
+		modelpos[2] += up * (rightHanded ? 1.0f : -1.0f) + scale * 0.1f;
+		modelpos[0] += fwd * cos(DEG2RAD(yaw));
+		modelpos[1] += fwd * sin(DEG2RAD(yaw));
+
+		// Weapon offset
+		float dx = gEngfuncs.pfnGetCvarFloat("vr_weapon_x") * scale;
+		float dy = gEngfuncs.pfnGetCvarFloat("vr_weapon_z") * scale;
+		float dz = gEngfuncs.pfnGetCvarFloat("vr_weapon_y") * scale;
+		modelpos[0] += dx * sin(DEG2RAD(yaw)) - dy * cos(DEG2RAD(yaw));
+		modelpos[1] -= dx * cos(DEG2RAD(yaw)) + dy * sin(DEG2RAD(yaw));
+		modelpos[2] += dz;
+	}
+
 	if (m_pCurrentEntity->curstate.movetype != MOVETYPE_NONE)
 	{
 		VectorCopy(m_pCurrentEntity->angles, angles);
