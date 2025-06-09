@@ -385,23 +385,28 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 	char* modelname = m_pCurrentEntity->model->name;
 	if (strncmp(modelname, prefix, strlen(prefix)) == 0)
 	{
-		float pitch = gEngfuncs.pfnGetCvarFloat("vr_player_pitch");
-		float yaw = gEngfuncs.pfnGetCvarFloat("vr_player_yaw");
-		float scale = gEngfuncs.pfnGetCvarFloat("vr_worldscale");
-		angles[ROLL] += gEngfuncs.pfnGetCvarFloat("vr_weapon_roll");
-
 		// Common calibration working for most weapons
 		float pivot_side = 0.1f;
 		float pivot_fwd = -0.4f;
 		float pivot_up = 0.25f;
 		float offset = 0.1f;
+		float pitch_offset = 1;
+		float yaw_offset = 2;
+
+		// Apply angles
+		float rightHanded = gEngfuncs.pfnGetCvarFloat("cl_righthand") * 2.0f - 1.0f;
+		float pitch = gEngfuncs.pfnGetCvarFloat("vr_player_pitch");
+		float yaw = gEngfuncs.pfnGetCvarFloat("vr_player_yaw");
+		float scale = gEngfuncs.pfnGetCvarFloat("vr_worldscale");
+		angles[ROLL] += gEngfuncs.pfnGetCvarFloat("vr_weapon_roll");
+		angles[PITCH] += pitch_offset;
+		angles[YAW] += yaw_offset;
 
 		// Pivot point offset
 		float fwd = scale * pivot_fwd;
 		float upY = scale * sin(DEG2RAD(pitch)) * pivot_up;
 		float upR = scale * sin(DEG2RAD(angles[ROLL])) * pivot_up;
 		float side = scale * (cos(DEG2RAD(angles[ROLL])) * pivot_side + offset);
-		float rightHanded = gEngfuncs.pfnGetCvarFloat("cl_righthand") * 2.0f - 1.0f;
 		modelpos[0] += fwd * cos(DEG2RAD(yaw)) - side * sin(DEG2RAD(yaw)) * rightHanded;
 		modelpos[1] += fwd * sin(DEG2RAD(yaw)) + side * cos(DEG2RAD(yaw)) * rightHanded;
 		modelpos[2] += upY + upR * rightHanded + scale * offset;
