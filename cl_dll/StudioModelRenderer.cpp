@@ -400,23 +400,17 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 		angles[PITCH] += pitch_offset;
 		angles[YAW] += yaw_offset;
 
-		// Pivot point calculation
-		for (int i = 0; i < 3; i++) {
-			modelpos[i] += m_vNormal[i] * pivot_fwd * scale;
-			modelpos[i] += m_vRight[i] * pivot_side * scale;
-			modelpos[i] += m_vUp[i] * pivot_up * scale;
-		}
-
-		// Weapon offset
+		// Get weapon offset
 		float dx = gEngfuncs.pfnGetCvarFloat("vr_weapon_x");
 		float dy = gEngfuncs.pfnGetCvarFloat("vr_weapon_y");
 		float dz = gEngfuncs.pfnGetCvarFloat("vr_weapon_z");
-		dx += gEngfuncs.pfnGetCvarFloat("vr_camera_x");
-		dy += gEngfuncs.pfnGetCvarFloat("vr_camera_y");
-		dz += gEngfuncs.pfnGetCvarFloat("vr_camera_z");
-		modelpos[0] += dx * sin(DEG2RAD(yaw)) - dy * cos(DEG2RAD(yaw));
-		modelpos[1] -= dx * cos(DEG2RAD(yaw)) + dy * sin(DEG2RAD(yaw));
-		modelpos[2] += dz;
+
+		// Position recalculation
+		for (int i = 0; i < 3; i++) {
+			modelpos[i] += m_vRight[i] * (pivot_side * scale - dx);
+			modelpos[i] += m_vNormal[i] * (pivot_fwd * scale - dy);
+			modelpos[i] += m_vUp[i] * (pivot_up * scale + dz);
+		}
 	}
 
 	if (m_pCurrentEntity->curstate.movetype != MOVETYPE_NONE)
