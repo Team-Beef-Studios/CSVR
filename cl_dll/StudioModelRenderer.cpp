@@ -388,34 +388,24 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 		// Common calibration working for most weapons
 		float pivot_side = 0.1f;
 		float pivot_fwd = -0.4f;
-		float pivot_pitch = 0.5f;
-		float pivot_roll = 0.25f;
-		float offset = 0.1f;
+		float pivot_up = 0.25f;
 		float pitch_offset = 1;
 		float yaw_offset = 2;
 
 		// Apply angles
 		float rightHanded = gEngfuncs.pfnGetCvarFloat("cl_righthand") * 2.0f - 1.0f;
-		float pitch = gEngfuncs.pfnGetCvarFloat("vr_player_pitch");
 		float yaw = gEngfuncs.pfnGetCvarFloat("vr_player_yaw");
 		float scale = gEngfuncs.pfnGetCvarFloat("vr_worldscale");
 		angles[ROLL] += gEngfuncs.pfnGetCvarFloat("vr_weapon_roll");
 		angles[PITCH] += pitch_offset;
 		angles[YAW] += yaw_offset;
 
-		// Pivot point offset
-		float fwd = scale * pivot_fwd;
-		float upP = scale * sin(DEG2RAD(pitch)) * pivot_pitch;
-		float upR = scale * sin(DEG2RAD(angles[ROLL])) * pivot_roll;
-		float side = scale * (cos(DEG2RAD(angles[ROLL])) * pivot_side + offset);
-		modelpos[0] += fwd * cos(DEG2RAD(yaw)) - side * sin(DEG2RAD(yaw)) * rightHanded;
-		modelpos[1] += fwd * sin(DEG2RAD(yaw)) + side * cos(DEG2RAD(yaw)) * rightHanded;
-		modelpos[2] += upP + upR * rightHanded + scale * offset;
-
-		// Pivot point YAW correction
-		float hmdYaw = gEngfuncs.pfnGetCvarFloat("vr_hmd_yaw");
-		modelpos[0] += fwd * (cos(DEG2RAD(yaw)) - cos(DEG2RAD(hmdYaw)));
-		modelpos[1] += fwd * (sin(DEG2RAD(yaw)) - sin(DEG2RAD(hmdYaw)));
+		// Pivot point calculation
+		for (int i = 0; i < 3; i++) {
+			modelpos[i] += m_vNormal[i] * pivot_fwd * scale;
+			modelpos[i] += m_vRight[i] * pivot_side * scale;
+			modelpos[i] += m_vUp[i] * pivot_up * scale;
+		}
 
 		// Weapon offset
 		float dx = gEngfuncs.pfnGetCvarFloat("vr_weapon_x");
