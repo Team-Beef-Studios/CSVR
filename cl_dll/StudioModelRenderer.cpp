@@ -388,7 +388,8 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 		// Common calibration working for most weapons
 		float pivot_side = 0.1f;
 		float pivot_fwd = -0.4f;
-		float pivot_up = 0.25f;
+		float pivot_pitch = 0.5f;
+		float pivot_roll = 0.25f;
 		float offset = 0.1f;
 		float pitch_offset = 1;
 		float yaw_offset = 2;
@@ -404,12 +405,12 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 
 		// Pivot point offset
 		float fwd = scale * pivot_fwd;
-		float upY = scale * sin(DEG2RAD(pitch)) * pivot_up;
-		float upR = scale * sin(DEG2RAD(angles[ROLL])) * pivot_up;
+		float upP = scale * sin(DEG2RAD(pitch)) * pivot_pitch;
+		float upR = scale * sin(DEG2RAD(angles[ROLL])) * pivot_roll;
 		float side = scale * (cos(DEG2RAD(angles[ROLL])) * pivot_side + offset);
 		modelpos[0] += fwd * cos(DEG2RAD(yaw)) - side * sin(DEG2RAD(yaw)) * rightHanded;
 		modelpos[1] += fwd * sin(DEG2RAD(yaw)) + side * cos(DEG2RAD(yaw)) * rightHanded;
-		modelpos[2] += upY + upR * rightHanded + scale * offset;
+		modelpos[2] += upP + upR * rightHanded + scale * offset;
 
 		// Pivot point YAW correction
 		float hmdYaw = gEngfuncs.pfnGetCvarFloat("vr_hmd_yaw");
