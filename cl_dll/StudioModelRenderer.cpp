@@ -418,9 +418,12 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 		modelpos[1] += fwd * (sin(DEG2RAD(yaw)) - sin(DEG2RAD(hmdYaw)));
 
 		// Weapon offset
-		float dx = gEngfuncs.pfnGetCvarFloat("vr_weapon_x") * scale;
-		float dy = gEngfuncs.pfnGetCvarFloat("vr_weapon_z") * scale;
-		float dz = gEngfuncs.pfnGetCvarFloat("vr_weapon_y") * scale;
+		float dx = gEngfuncs.pfnGetCvarFloat("vr_weapon_x");
+		float dy = gEngfuncs.pfnGetCvarFloat("vr_weapon_y");
+		float dz = gEngfuncs.pfnGetCvarFloat("vr_weapon_z");
+		dx += gEngfuncs.pfnGetCvarFloat("vr_camera_x");
+		dy += gEngfuncs.pfnGetCvarFloat("vr_camera_y");
+		dz += gEngfuncs.pfnGetCvarFloat("vr_camera_z");
 		modelpos[0] += dx * sin(DEG2RAD(yaw)) - dy * cos(DEG2RAD(yaw));
 		modelpos[1] -= dx * cos(DEG2RAD(yaw)) + dy * sin(DEG2RAD(yaw));
 		modelpos[2] += dz;
