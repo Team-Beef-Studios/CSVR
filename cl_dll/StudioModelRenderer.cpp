@@ -406,10 +406,14 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 		float dz = gEngfuncs.pfnGetCvarFloat("vr_weapon_z");
 
 		// Position recalculation
+		vec3_t fwd = {m_vNormal[0], m_vNormal[1], 0.0f};
+		vec3_t right = {m_vRight[0], m_vRight[1], 0.0f};
+		VectorNormalize(fwd);
+		VectorNormalize(right);
 		for (int i = 0; i < 3; i++) {
-			modelpos[i] += m_vRight[i] * (pivot_side * scale - dx);
-			modelpos[i] += m_vNormal[i] * (pivot_fwd * scale - dy);
-			modelpos[i] += m_vUp[i] * (pivot_up * scale + dz);
+			modelpos[i] += right[i] * (pivot_side * scale - dx);
+			modelpos[i] += fwd[i] * (pivot_fwd * scale - dy);
+			modelpos[i] += pivot_up * scale + dz;
 		}
 	}
 
