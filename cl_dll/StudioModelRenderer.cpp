@@ -386,16 +386,15 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 	if (strncmp(modelname, prefix, strlen(prefix)) == 0)
 	{
 		// Common calibration working for most weapons
-		float pivot_side = 0.1f;
-		float pivot_fwd = -0.4f;
-		float pivot_up = 0.25f;
+		float pivot_side = 3;
+		float pivot_fwd = -12;
+		float pivot_up = 7;
 		float pitch_offset = 1;
 		float yaw_offset = 2;
 
 		// Apply angles
 		float rightHanded = gEngfuncs.pfnGetCvarFloat("cl_righthand") * 2.0f - 1.0f;
 		float yaw = gEngfuncs.pfnGetCvarFloat("vr_player_yaw");
-		float scale = gEngfuncs.pfnGetCvarFloat("vr_worldscale");
 		angles[ROLL] += gEngfuncs.pfnGetCvarFloat("vr_weapon_roll");
 		angles[PITCH] += pitch_offset;
 		angles[YAW] += yaw_offset;
@@ -411,9 +410,9 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 		VectorNormalize(fwd);
 		VectorNormalize(right);
 		for (int i = 0; i < 3; i++) {
-			modelpos[i] += right[i] * (pivot_side * scale - dx);
-			modelpos[i] += fwd[i] * (pivot_fwd * scale - dy);
-			modelpos[i] += pivot_up * scale + dz;
+			modelpos[i] += right[i] * (pivot_side - dx);
+			modelpos[i] += fwd[i] * (pivot_fwd - dy);
+			modelpos[i] += pivot_up + dz;
 		}
 	}
 
