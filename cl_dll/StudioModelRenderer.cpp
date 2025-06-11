@@ -393,8 +393,6 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 		float yaw_offset = 2;
 
 		// Apply angles
-		float rightHanded = gEngfuncs.pfnGetCvarFloat("cl_righthand") * 2.0f - 1.0f;
-		float yaw = gEngfuncs.pfnGetCvarFloat("vr_player_yaw");
 		angles[ROLL] += gEngfuncs.pfnGetCvarFloat("vr_weapon_roll");
 		angles[PITCH] += pitch_offset;
 		angles[YAW] += yaw_offset;
@@ -409,11 +407,11 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 		vec3_t right = {m_vRight[0], m_vRight[1], 0.0f};
 		VectorNormalize(fwd);
 		VectorNormalize(right);
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 2; i++) {
 			modelpos[i] += right[i] * (pivot_side - dx);
 			modelpos[i] += fwd[i] * (pivot_fwd - dy);
-			modelpos[i] += pivot_up + dz;
 		}
+		modelpos[2] += pivot_up + dz;
 	}
 
 	if (m_pCurrentEntity->curstate.movetype != MOVETYPE_NONE)
