@@ -407,11 +407,13 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 		vec3_t right = {m_vRight[0], m_vRight[1], 0.0f};
 		VectorNormalize(fwd);
 		VectorNormalize(right);
-		for (int i = 0; i < 2; i++) {
-			modelpos[i] += right[i] * (pivot_side - dx);
-			modelpos[i] += fwd[i] * (pivot_fwd - dy);
-		}
+		modelpos[0] += right[0] * (pivot_side - dx) + fwd[0] * (pivot_fwd - dy);
+		modelpos[1] += right[1] * (pivot_side - dx) + fwd[1] * (pivot_fwd - dy);
 		modelpos[2] += pivot_up + dz;
+
+		// Camera offset
+		modelpos[0] -= gEngfuncs.pfnGetCvarFloat("vr_offset_x");
+		modelpos[1] -= gEngfuncs.pfnGetCvarFloat("vr_offset_y");
 	}
 
 	if (m_pCurrentEntity->curstate.movetype != MOVETYPE_NONE)
