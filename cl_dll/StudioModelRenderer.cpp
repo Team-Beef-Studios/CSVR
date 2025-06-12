@@ -412,8 +412,10 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 		modelpos[2] += pivot_up + dz;
 
 		// Camera offset
-		modelpos[0] -= gEngfuncs.pfnGetCvarFloat("vr_offset_x");
-		modelpos[1] -= gEngfuncs.pfnGetCvarFloat("vr_offset_y");
+		if (gEngfuncs.pfnGetCvarFloat("vr_6dof") > 0) {
+			modelpos[0] -= gEngfuncs.pfnGetCvarFloat("vr_offset_x");
+			modelpos[1] -= gEngfuncs.pfnGetCvarFloat("vr_offset_y");
+		}
 	}
 
 	if (m_pCurrentEntity->curstate.movetype != MOVETYPE_NONE)
