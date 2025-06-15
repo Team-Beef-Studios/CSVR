@@ -63,25 +63,8 @@ public class XashActivity extends SDLActivity {
         // Copy custom weapon models
         File models = new File(root, "cstrike/models");
         if (!new File(models, "nocopy").exists()) {
-            for (String model : getAssetsList(false, "models")) {
-                try {
-                    InputStream in = getAssets(false).open("models/" + model);
-                    FileOutputStream out = new FileOutputStream(new File(models, model));
-                    byte[] buf = new byte[1024];
-                    while (true) {
-                        int count = in.read(buf);
-                        if (count <= 0) {
-                            break;
-                        }
-                        out.write(buf, 0, count);
-                    }
-                    out.close();
-                    in.close();
-                    Log.d("CSVR", "Model " + model + " unpacked");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            copyAssets("models", models);
+            copyAssets("models/shield", new File(models, "shield"));
         }
         nativeSetenv("xr_manufacturer", Build.MANUFACTURER.toUpperCase());
     }
@@ -206,5 +189,27 @@ public class XashActivity extends SDLActivity {
             return -1;
         }
         return 0;
+    }
+
+    private void copyAssets(String from, File to) {
+        for (String model : getAssetsList(false, from)) {
+            try {
+                InputStream in = getAssets(false).open(from + "/" + model);
+                FileOutputStream out = new FileOutputStream(new File(to, model));
+                byte[] buf = new byte[1024];
+                while (true) {
+                    int count = in.read(buf);
+                    if (count <= 0) {
+                        break;
+                    }
+                    out.write(buf, 0, count);
+                }
+                out.close();
+                in.close();
+                Log.d("CSVR", "Model " + model + " unpacked");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

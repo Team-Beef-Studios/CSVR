@@ -382,8 +382,9 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 
 	// VR weapon transform
 	char* prefix = "models/v_";
+	char* prefixShield = "models/shield/v_";
 	char* modelname = m_pCurrentEntity->model->name;
-	if (strncmp(modelname, prefix, strlen(prefix)) == 0)
+	if ((strncmp(modelname, prefix, strlen(prefix)) == 0) || (strncmp(modelname, prefixShield, strlen(prefixShield)) == 0))
 	{
 		// Common calibration working for most weapons
 		float pivot_side = 3;
