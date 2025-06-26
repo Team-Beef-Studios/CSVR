@@ -138,8 +138,8 @@ int CHudSpectatorGui::Draw( float flTime )
 		startpos = XRES(gHUD.m_Spectator.m_OverviewData.insetWindowWidth) + XRES(gHUD.m_Spectator.m_OverviewData.insetWindowX);
 		startpos *= ScreenWidth / TrueWidth; // hud_scale adjust
 	}
-	FillRGBABlend(startpos, 0, ScreenWidth - startpos, INT_YPOS(2), 0, 0, 0, 153);
-	FillRGBABlend(0, ScreenHeight - INT_YPOS(2), ScreenWidth, INT_YPOS(2), 0, 0, 0, 153);
+	//FillRGBABlend(startpos, 0, ScreenWidth - startpos, INT_YPOS(2), 0, 0, 0, 153);
+	//FillRGBABlend(0, ScreenHeight - INT_YPOS(2), ScreenWidth, INT_YPOS(2), 0, 0, 0, 153);
 
 	// divider
 	FillRGBABlend( INT_XPOS(12.5), INT_YPOS(2) * 0.25, 1, INT_YPOS(2) * 0.5, r, g, b, 255 );
