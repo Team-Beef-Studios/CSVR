@@ -1479,9 +1479,9 @@ void CStudioModelRenderer::UpdateVRTransform(vec3_t angles, vec3_t modelpos)
 	offsetMatrix[0][0] = scale;
 	offsetMatrix[1][1] = scale;
 	offsetMatrix[2][2] = scale;
-	offsetMatrix[0][3] = gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_y");
-	offsetMatrix[1][3] = rightHanded * gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_x");
-	offsetMatrix[2][3] = gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_z");
+	offsetMatrix[0][3] = gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_y") * scale;
+	offsetMatrix[1][3] = rightHanded * gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_x") * scale;
+	offsetMatrix[2][3] = gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_z") * scale;
 	ConcatTransforms(anglesMatrix, offsetMatrix, (*m_protationmatrix));
 
 	// Weapon motion tracking
