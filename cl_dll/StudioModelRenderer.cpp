@@ -380,6 +380,14 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 	angles[PITCH] = m_pCurrentEntity->curstate.angles[PITCH];
 	angles[YAW] = m_pCurrentEntity->curstate.angles[YAW];
 
+	if (m_pCurrentEntity->curstate.movetype != MOVETYPE_NONE)
+	{
+		VectorCopy(m_pCurrentEntity->angles, angles);
+	}
+
+	angles[PITCH] = -angles[PITCH];
+	AngleMatrix(angles, (*m_protationmatrix));
+
 	// VR weapon transform
 	char* prefix = "models/v_";
 	char* prefixShield = "models/shield/v_";
@@ -387,16 +395,30 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 	if ((strncmp(modelname, prefix, strlen(prefix)) == 0) || (strncmp(modelname, prefixShield, strlen(prefixShield)) == 0))
 	{
 		// Common calibration working for most weapons
-		float pivot_side = 3;
+		float pivot_side = 5;
 		float pivot_fwd = -12;
 		float pivot_up = 7;
 		float pitch_offset = 1;
 		float yaw_offset = 2;
+		float scale = 1;
 
 		// Apply angles
+		static float anglesMatrix[3][4];
 		angles[ROLL] += gEngfuncs.pfnGetCvarFloat("vr_weapon_roll");
-		angles[PITCH] += pitch_offset;
+		angles[PITCH] -= pitch_offset;
 		angles[YAW] += yaw_offset;
+		AngleMatrix(angles, anglesMatrix);
+
+		// Get pivot point offset and scale
+		bool rightHanded = gEngfuncs.pfnGetCvarFloat("cl_righthand") > 0;
+		static float offsetMatrix[3][4];
+		offsetMatrix[0][0] = scale;
+		offsetMatrix[1][1] = scale;
+		offsetMatrix[2][2] = scale;
+		offsetMatrix[0][3] = pivot_fwd;
+		offsetMatrix[1][3] = rightHanded ? pivot_side : -pivot_side;
+		offsetMatrix[2][3] = pivot_up;
+		ConcatTransforms(anglesMatrix, offsetMatrix, (*m_protationmatrix));
 
 		// Get weapon offset
 		float dx = gEngfuncs.pfnGetCvarFloat("vr_weapon_x");
@@ -408,24 +430,20 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 		vec3_t right = {m_vRight[0], m_vRight[1], 0.0f};
 		VectorNormalize(fwd);
 		VectorNormalize(right);
-		modelpos[0] += right[0] * (pivot_side - dx) + fwd[0] * (pivot_fwd - dy);
-		modelpos[1] += right[1] * (pivot_side - dx) + fwd[1] * (pivot_fwd - dy);
-		modelpos[2] += pivot_up + dz;
+		modelpos[0] += right[0] * -dx + fwd[0] * -dy;
+		modelpos[1] += right[1] * -dx + fwd[1] * -dy;
+		modelpos[2] += dz;
 
 		// Camera offset
 		if (gEngfuncs.pfnGetCvarFloat("vr_6dof") > 0) {
 			modelpos[0] -= gEngfuncs.pfnGetCvarFloat("vr_offset_x");
 			modelpos[1] -= gEngfuncs.pfnGetCvarFloat("vr_offset_y");
 		}
+	} else {
+		(*m_protationmatrix)[0][3] = 0;
+		(*m_protationmatrix)[1][3] = 0;
+		(*m_protationmatrix)[2][3] = 0;
 	}
-
-	if (m_pCurrentEntity->curstate.movetype != MOVETYPE_NONE)
-	{
-		VectorCopy(m_pCurrentEntity->angles, angles);
-	}
-
-	angles[PITCH] = -angles[PITCH];
-	AngleMatrix(angles, (*m_protationmatrix));
 
 	if (!IEngineStudio.IsHardware())
 	{
@@ -453,9 +471,9 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 		}
 	}
 
-	(*m_protationmatrix)[0][3] = modelpos[0];
-	(*m_protationmatrix)[1][3] = modelpos[1];
-	(*m_protationmatrix)[2][3] = modelpos[2];
+	(*m_protationmatrix)[0][3] += modelpos[0];
+	(*m_protationmatrix)[1][3] += modelpos[1];
+	(*m_protationmatrix)[2][3] += modelpos[2];
 }
 
 float CStudioModelRenderer::StudioEstimateInterpolant(void)
