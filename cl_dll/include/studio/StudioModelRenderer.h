@@ -57,6 +57,10 @@ public:
 	virtual void StudioProcessGait(entity_state_t *pplayer);
 	virtual void StudioSetShadowSprite(int idx);
 	void StudioDrawShadow(Vector origin, float scale);
+private:
+	bool IsVRWeapon();
+	void UpdateVRCalibration();
+	void UpdateVRTransform(vec3_t angles, vec3_t modelpos);
 
 
 public:
