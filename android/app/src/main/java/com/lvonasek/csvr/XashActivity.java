@@ -24,7 +24,7 @@ public class XashActivity extends SDLActivity {
     private static Activity activity;
     private boolean mUseVolumeKeys;
     private String mPackageName;
-    private static final String TAG = "XashActivity";
+    private static final String TAG = "CSVR";
 
     private static final int PERMISSION_CODE = 16;
 
@@ -66,6 +66,7 @@ public class XashActivity extends SDLActivity {
             copyAssets("models", models);
             copyAssets("models/shield", new File(models, "shield"));
         }
+        copyAsset("vr_weapons.cfg", new File(models, "vr_weapons.cfg"), false);
         nativeSetenv("xr_manufacturer", Build.MANUFACTURER.toUpperCase());
     }
 
@@ -191,11 +192,11 @@ public class XashActivity extends SDLActivity {
         return 0;
     }
 
-    private void copyAssets(String from, File to) {
-        for (String model : getAssetsList(false, from)) {
+    private boolean copyAsset(String from, File to, boolean overwrite) {
+        if (overwrite || !to.exists()) {
             try {
-                InputStream in = getAssets(false).open(from + "/" + model);
-                FileOutputStream out = new FileOutputStream(new File(to, model));
+                InputStream in = getAssets(false).open(from);
+                FileOutputStream out = new FileOutputStream(to);
                 byte[] buf = new byte[1024];
                 while (true) {
                     int count = in.read(buf);
@@ -206,10 +207,23 @@ public class XashActivity extends SDLActivity {
                 }
                 out.close();
                 in.close();
-                Log.d("CSVR", "Model " + model + " unpacked");
-            } catch (Exception e) {
-                e.printStackTrace();
+                Log.d(TAG, "File " + from + " unpacked");
+                return true;
+            } catch (Exception ignored) {
             }
+        }
+        return false;
+    }
+
+    private void copyAssets(String from, File to) {
+        boolean ok = true;
+        for (String model : getAssetsList(false, from)) {
+            if (!copyAsset(from + "/" + model, new File(to, model), true)) {
+                ok = false;
+            }
+        }
+        if (ok) {
+            Log.d(TAG, "Folder " + from + " unpacked");
         }
     }
 }
