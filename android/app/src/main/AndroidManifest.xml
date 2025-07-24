@@ -34,6 +34,7 @@
 
         <meta-data android:name="com.samsung.android.vr.application.mode" android:value="vr_only"/>
         <meta-data android:name="com.oculus.supportedDevices" android:value="quest2|questpro|quest3|quest3s"/>
+        <meta-data android:name="com.oculus.ossplash" android:value="true"/>
         <meta-data android:name="pvr.app.type" android:value="vr"/>
 
         <activity
