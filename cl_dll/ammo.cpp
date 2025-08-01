@@ -1507,8 +1507,8 @@ void CHudAmmo::DrawCrosshair( int weaponId )
 	center_x *= 1.0f + gEngfuncs.pfnGetCvarFloat("vr_xhair_x");
 	center_y *= 1.0f - gEngfuncs.pfnGetCvarFloat("vr_xhair_y");
 
-	gap = ScaleForRes( GetCrosshairGap( weaponId ), ScreenHeight * gHUD.m_flScale );
-	length = ScaleForRes( xhair_size->value, ScreenHeight * gHUD.m_flScale );
+	gap = ScaleForRes( GetCrosshairGap( weaponId ), ScreenHeight * gHUD.m_flScale ) / 3.0f;
+	length = ScaleForRes( xhair_size->value, ScreenHeight * gHUD.m_flScale ) / 3.0f;
 	thickness = ScaleForRes( xhair_thick->value, ScreenHeight * gHUD.m_flScale );
 	thickness = max( 1, thickness );
 
