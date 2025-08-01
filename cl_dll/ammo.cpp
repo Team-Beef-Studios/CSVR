@@ -308,7 +308,7 @@ int CHudAmmo::Init(void)
 	xhair_pad = CVAR_CREATE( "xhair_pad", "0", FCVAR_ARCHIVE );
 	xhair_dot = CVAR_CREATE( "xhair_dot", "0", FCVAR_ARCHIVE );
 	xhair_t = CVAR_CREATE( "xhair_t", "0", FCVAR_ARCHIVE );
-	xhair_dynamic_scale = CVAR_CREATE( "xhair_dynamic_scale", "0", FCVAR_ARCHIVE );
+	xhair_dynamic_scale = CVAR_CREATE( "xhair_dynamic_scale", "1", FCVAR_ARCHIVE );
 	xhair_gap_useweaponvalue = CVAR_CREATE( "xhair_gap_useweaponvalue", "0", FCVAR_ARCHIVE );
 	xhair_dynamic_move = CVAR_CREATE( "xhair_dynamic_move", "1", FCVAR_ARCHIVE );
 
@@ -1506,6 +1506,9 @@ void CHudAmmo::DrawCrosshair( int weaponId )
 	center_y = ( ScreenHeight / 2 ) * gHUD.m_flScale;
 	center_x *= 1.0f + gEngfuncs.pfnGetCvarFloat("vr_xhair_x");
 	center_y *= 1.0f - gEngfuncs.pfnGetCvarFloat("vr_xhair_y");
+	if (gEngfuncs.pfnGetCvarFloat("vr_xhair") < 0.5f) {
+		return;
+	}
 
 	gap = ScaleForRes( GetCrosshairGap( weaponId ), ScreenHeight * gHUD.m_flScale ) / 3.0f;
 	length = ScaleForRes( xhair_size->value, ScreenHeight * gHUD.m_flScale ) / 3.0f;
