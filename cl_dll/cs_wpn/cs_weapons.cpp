@@ -1230,9 +1230,16 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 	player.m_flNextAttack  = from->client.m_flNextAttack;
 
 	//Disable animations if requested
+	static int lastAnim = 0;
 	static bool wasAnimDisabled = false;
 	if (wasAnimDisabled || gEngfuncs.pfnGetCvarFloat("vr_weapon_anim") < 0.5f) {
-		wasAnimDisabled = player.pev->weaponanim != 0;
+		if (!wasAnimDisabled) {
+			wasAnimDisabled = true;
+			lastAnim = player.pev->weaponanim;
+		} else if (lastAnim != player.pev->weaponanim) {
+			gEngfuncs.Cvar_SetValue("vr_weapon_anim", 1);
+			wasAnimDisabled = false;
+		}
 		player.pev->weaponanim = 0;
 	}
 
