@@ -1229,6 +1229,13 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 	player.pev->viewmodel  = from->client.viewmodel;
 	player.m_flNextAttack  = from->client.m_flNextAttack;
 
+	//Disable animations if requested
+	static bool wasAnimDisabled = false;
+	if (wasAnimDisabled || gEngfuncs.pfnGetCvarFloat("vr_weapon_anim") < 0.5f) {
+		wasAnimDisabled = player.pev->weaponanim != 0;
+		player.pev->weaponanim = 0;
+	}
+
 	g_iPlayerFlags    = player.pev->flags = from->client.flags;
 	g_vPlayerVelocity = player.pev->velocity;
 	g_flPlayerSpeed	  = player.pev->velocity.Length();
