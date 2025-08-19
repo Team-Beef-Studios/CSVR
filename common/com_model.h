@@ -16,6 +16,7 @@
 
 #define STUDIO_RENDER 1
 #define STUDIO_EVENTS 2
+#define STUDIO_CUSTOM_ENTITY 4
 
 #define MAX_CLIENTS			32
 #define	MAX_EDICTS			900

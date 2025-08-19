@@ -58,9 +58,13 @@ public:
 	virtual void StudioSetShadowSprite(int idx);
 	void StudioDrawShadow(Vector origin, float scale);
 private:
+	bool IsVRHand();
+	bool IsVRShield();
+	bool IsVRSingleHandWeapon();
 	bool IsVRWeapon();
 	void UpdateVRCalibration();
-	void UpdateVRTransform(vec3_t angles, vec3_t modelpos);
+	void UpdateVRHandTransform(vec3_t angles, vec3_t modelpos);
+	void UpdateVRWeaponTransform(vec3_t angles, vec3_t modelpos);
 
 
 public:
@@ -76,6 +80,7 @@ public:
 	cvar_t *m_pCvarShadows;
 	cvar_t *m_pCvarDebug;
 	cl_entity_t *m_pCurrentEntity;
+	model_t *m_pHandModel;
 	model_t *m_pRenderModel;
 	player_info_t *m_pPlayerInfo;
 	int m_nPlayerIndex;
