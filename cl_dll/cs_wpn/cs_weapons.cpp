@@ -537,6 +537,7 @@ Vector CBaseEntity::FireBullets3 ( Vector vecSrc, Vector vecDirShooting, float f
 
 	return Vector(x * flSpread, y * flSpread, 0.0f);
 }
+
 /*
 =====================
 CBasePlayerWeapon::ItemPostFrame
@@ -594,6 +595,8 @@ void CBasePlayerWeapon::ItemPostFrame( void )
 			m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase();
 		}
 	}
+	bool shielded = m_pPlayer->HasShield() && m_pPlayer->m_bShieldDrawn;
+	gEngfuncs.Cvar_SetValue("vr_shielded", shielded ? 1 : 0);
 
 	if ((m_fInReload) && m_pPlayer->m_flNextAttack <= UTIL_WeaponTimeBase())
 	{

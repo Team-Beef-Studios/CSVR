@@ -89,6 +89,7 @@ CStudioModelRenderer::CStudioModelRenderer(void)
 	m_pPlayerInfo = NULL;
 	m_pHandModel = NULL;
 	m_pRenderModel = NULL;
+	m_pShieldModel = NULL;
 	m_iShadowSprite = 0;
 }
 
@@ -419,9 +420,12 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 	}
 
 	// VR weapon transform
-	if (IsVRHand()) {
+	if (IsVROffHand()) {
 		UpdateVRHandTransform(angles, modelpos);
 	} else if (IsVRShield() || IsVRWeapon()) {
+		if (gEngfuncs.pfnGetCvarFloat("vr_shielded") > 0) {
+			modelpos[2] += INT_MIN;
+		}
 		UpdateVRCalibration();
 		UpdateVRWeaponTransform(angles, modelpos);
 	} else {
@@ -958,7 +962,8 @@ int CStudioModelRenderer::StudioDrawModel(int flags)
 		gHUD.cl_righthand->value = iRightHandValue;
 	}
 
-	if (IsVRSingleHandWeapon() && !IsVRHand())
+	//Left hand model rendering
+	if (IsVRSingleHandWeapon() && !(flags & STUDIO_CUSTOM_ENTITY))
 	{
 		if (!m_pHandModel || (m_pHandModel->numsurfaces == 0))
 		{
@@ -969,6 +974,20 @@ int CStudioModelRenderer::StudioDrawModel(int flags)
 		handent.model = m_pHandModel;
 		m_pCurrentEntity = &handent;
 		m_pCurrentEntity->curstate.sequence = 1;
+		StudioDrawModel(flags | STUDIO_CUSTOM_ENTITY);
+	}
+	//Shield in left hand rendering
+	else if (IsVRShield() && !(flags & STUDIO_CUSTOM_ENTITY))
+	{
+		if (!m_pShieldModel || (m_pShieldModel->numsurfaces == 0))
+		{
+			m_pShieldModel = gEngfuncs.CL_LoadModel( "models/v_shield_r.mdl", NULL );
+		}
+		static cl_entity_t shieldent;
+		memcpy(&shieldent, m_pCurrentEntity, sizeof(cl_entity_t));
+		shieldent.model = m_pShieldModel;
+		m_pCurrentEntity = &shieldent;
+		m_pCurrentEntity->curstate.sequence = 6;
 		StudioDrawModel(flags | STUDIO_CUSTOM_ENTITY);
 	}
 
@@ -1457,9 +1476,15 @@ void CStudioModelRenderer::StudioDrawShadow( Vector origin, float scale )
 	IEngineStudio.StudioRenderShadow( m_iShadowSprite, p1, p2, p3, p4 );
 }
 
-bool CStudioModelRenderer::IsVRHand()
+bool CStudioModelRenderer::IsVROffHand()
 {
-	return strcmp(m_pCurrentEntity->model->name, "models/v_hand.mdl") == 0;
+	char* modelname = m_pCurrentEntity->model->name;
+	if (strcmp(modelname, "models/v_hand.mdl") == 0) {
+		return true;
+	} else if (strcmp(modelname, "models/v_shield_r.mdl") == 0) {
+		return true;
+	}
+	return false;
 }
 
 bool CStudioModelRenderer::IsVRShield()
@@ -1563,7 +1588,7 @@ void CStudioModelRenderer::UpdateVRHandTransform(vec3_t angles, vec3_t modelpos)
 	offsetMatrix[1][1] = 1;
 	offsetMatrix[2][2] = 1;
 	offsetMatrix[0][3] = -12;
-	offsetMatrix[1][3] = rightHanded * 5;
+	offsetMatrix[1][3] = rightHanded * (IsVRShield() ? -5.0f : 5.0f);
 	offsetMatrix[2][3] = 5;
 	ConcatTransforms(anglesMatrix, offsetMatrix, (*m_protationmatrix));
 

@@ -58,7 +58,7 @@ public:
 	virtual void StudioSetShadowSprite(int idx);
 	void StudioDrawShadow(Vector origin, float scale);
 private:
-	bool IsVRHand();
+	bool IsVROffHand();
 	bool IsVRShield();
 	bool IsVRSingleHandWeapon();
 	bool IsVRWeapon();
@@ -82,6 +82,7 @@ public:
 	cl_entity_t *m_pCurrentEntity;
 	model_t *m_pHandModel;
 	model_t *m_pRenderModel;
+	model_t *m_pShieldModel;
 	player_info_t *m_pPlayerInfo;
 	int m_nPlayerIndex;
 	float m_flGaitMovement;
