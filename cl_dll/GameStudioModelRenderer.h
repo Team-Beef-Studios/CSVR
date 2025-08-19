@@ -62,7 +62,7 @@ public:
 	CGameStudioModelRenderer(void);
 
 public:
-	virtual void StudioSetupBones(void);
+	virtual void StudioSetupBones(int flags);
 	virtual void StudioEstimateGait(entity_state_t *pplayer);
 	virtual void StudioProcessGait(entity_state_t *pplayer);
 	virtual int StudioDrawPlayer(int flags, entity_state_t *pplayer);

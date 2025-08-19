@@ -589,7 +589,7 @@ float CStudioModelRenderer::StudioEstimateFrame(mstudioseqdesc_t *pseqdesc)
 	return f;
 }
 
-void CStudioModelRenderer::StudioSetupBones(void)
+void CStudioModelRenderer::StudioSetupBones(int flags)
 {
 	int i;
 	double f;
@@ -711,7 +711,7 @@ void CStudioModelRenderer::StudioSetupBones(void)
 		}
 	}
 
-	bool bIsViewModel = gEngfuncs.GetViewModel() == m_pCurrentEntity;
+	bool bIsViewModel = (gEngfuncs.GetViewModel() == m_pCurrentEntity) || (flags & STUDIO_CUSTOM_ENTITY);
 
 	for (i = 0; i < m_pStudioHeader->numbones; i++)
 	{
@@ -726,7 +726,7 @@ void CStudioModelRenderer::StudioSetupBones(void)
 			if (IEngineStudio.IsHardware())
 			{
 				// i know this looks HORRIBLE but I'm too lazy to simplify this right now
-				if( gHUD.cl_righthand && gHUD.cl_righthand->value > 0.0f && bIsViewModel && !g_bHoldingShield || gHUD.GetGameType() == GAME_CZERO && bIsViewModel && g_bHoldingShield )
+				if( gHUD.cl_righthand && gHUD.cl_righthand->value > 0.0f && bIsViewModel || gHUD.GetGameType() == GAME_CZERO && bIsViewModel && g_bHoldingShield )
 				{
 					bonematrix[1][0] = -bonematrix[1][0];
 					bonematrix[1][1] = -bonematrix[1][1];
@@ -865,6 +865,14 @@ int CStudioModelRenderer::StudioDrawModel(int flags)
 
 		gHUD.cl_righthand->value = !gHUD.cl_righthand->value;
 	}
+	else if (flags & STUDIO_CUSTOM_ENTITY)
+	{
+		bChangedRightHand = true;
+
+		iRightHandValue = gHUD.cl_righthand->value;
+
+		gHUD.cl_righthand->value = !gHUD.cl_righthand->value;
+	}
 
 	IEngineStudio.GetTimes(&m_nFrameCount, &m_clTime, &m_clOldTime);
 	IEngineStudio.GetViewInfo(m_vRenderOrigin, m_vUp, m_vRight, m_vNormal);
@@ -922,7 +930,7 @@ int CStudioModelRenderer::StudioDrawModel(int flags)
 	if (m_pCurrentEntity->curstate.movetype == MOVETYPE_FOLLOW)
 		StudioMergeBones(m_pRenderModel);
 	else
-		StudioSetupBones();
+		StudioSetupBones(flags);
 
 	StudioSaveBones();
 
@@ -1207,7 +1215,7 @@ int CStudioModelRenderer::StudioDrawPlayer(int flags, entity_state_t *pplayer)
 
 	m_pPlayerInfo = IEngineStudio.PlayerInfo(m_nPlayerIndex);
 
-	StudioSetupBones();
+	StudioSetupBones(flags);
 	StudioSaveBones();
 
 	m_pPlayerInfo->renderframe = m_nFrameCount;

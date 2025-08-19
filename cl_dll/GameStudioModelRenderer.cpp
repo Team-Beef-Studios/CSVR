@@ -98,7 +98,7 @@ mstudioanim_t *CGameStudioModelRenderer::LookupAnimation(mstudioseqdesc_t *pseqd
 	return panim;
 }
 
-void CGameStudioModelRenderer::StudioSetupBones(void)
+void CGameStudioModelRenderer::StudioSetupBones(int flags)
 {
 	int i;
 	double f;
@@ -120,7 +120,7 @@ void CGameStudioModelRenderer::StudioSetupBones(void)
 
 	if (!m_pCurrentEntity->player)
 	{
-		CStudioModelRenderer::StudioSetupBones();
+		CStudioModelRenderer::StudioSetupBones(flags);
 		return;
 	}
 
@@ -936,7 +936,7 @@ int CGameStudioModelRenderer::_StudioDrawPlayer(int flags, entity_state_t *pplay
 
 	m_pPlayerInfo = IEngineStudio.PlayerInfo(m_nPlayerIndex);
 
-	StudioSetupBones();
+	StudioSetupBones(flags);
 	StudioSaveBones();
 
 	m_pPlayerInfo->renderframe = m_nFrameCount;

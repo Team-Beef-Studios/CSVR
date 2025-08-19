@@ -36,7 +36,7 @@ public:
 public:
 	virtual mstudioanim_t *StudioGetAnim(model_t *pSubModel, mstudioseqdesc_t *pseqdesc);
 	virtual void StudioSetUpTransform(int trivial_accept);
-	virtual void StudioSetupBones(void);
+	virtual void StudioSetupBones(int flags);
 	virtual void StudioCalcAttachments(void);
 	virtual void StudioSaveBones(void);
 	virtual void StudioMergeBones(model_t *pSubModel);
