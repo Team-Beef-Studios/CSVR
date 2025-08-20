@@ -1499,7 +1499,10 @@ bool CStudioModelRenderer::IsVRShield()
 {
 	char* prefixShield = "models/shield/v_";
 	char* modelname = m_pCurrentEntity->model->name;
-	return strncmp(modelname, prefixShield, strlen(prefixShield)) == 0;
+	if (strncmp(modelname, prefixShield, strlen(prefixShield)) == 0) {
+		return true;
+	}
+	return strcmp(m_pCurrentEntity->model->name, "models/v_shield_r.mdl") == 0;
 }
 
 bool CStudioModelRenderer::IsVRSingleHandWeapon()
@@ -1596,7 +1599,7 @@ void CStudioModelRenderer::UpdateVRHandTransform(vec3_t angles, vec3_t modelpos)
 	offsetMatrix[1][1] = 1;
 	offsetMatrix[2][2] = 1;
 	offsetMatrix[0][3] = -12;
-	offsetMatrix[1][3] = rightHanded * (IsVRShield() ? -5.0f : 5.0f);
+	offsetMatrix[1][3] = rightHanded * (IsVRShield() ? 5.0f : -5.0f);
 	offsetMatrix[2][3] = 5;
 	ConcatTransforms(anglesMatrix, offsetMatrix, (*m_protationmatrix));
 
