@@ -60,6 +60,7 @@ public:
 private:
 	bool IsVROffHand();
 	bool IsVRShield();
+	bool IsVRDualHandWeapon();
 	bool IsVRSingleHandWeapon();
 	bool IsVRWeapon();
 	void UpdateVRCalibration();
@@ -80,6 +81,7 @@ public:
 	cvar_t *m_pCvarShadows;
 	cvar_t *m_pCvarDebug;
 	cl_entity_t *m_pCurrentEntity;
+	model_t *m_pDualModel;
 	model_t *m_pHandModel;
 	model_t *m_pRenderModel;
 	model_t *m_pShieldModel;

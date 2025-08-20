@@ -87,6 +87,7 @@ CStudioModelRenderer::CStudioModelRenderer(void)
 	m_pBodyPart = NULL;
 	m_pSubModel = NULL;
 	m_pPlayerInfo = NULL;
+	m_pDualModel = NULL;
 	m_pHandModel = NULL;
 	m_pRenderModel = NULL;
 	m_pShieldModel = NULL;
@@ -998,6 +999,19 @@ int CStudioModelRenderer::StudioDrawModel(int flags)
 		m_pCurrentEntity->curstate.sequence = 6;
 		StudioDrawModel(flags | STUDIO_CUSTOM_ENTITY);
 	}
+	//Dual weapon in left hand rendering
+	else if (IsVRDualHandWeapon() && !(flags & STUDIO_CUSTOM_ENTITY))
+	{
+		if (!m_pDualModel || (m_pDualModel->numsurfaces == 0))
+		{
+			m_pDualModel = gEngfuncs.CL_LoadModel( "models/v_elite_l.mdl", NULL );
+		}
+		static cl_entity_t dualent;
+		memcpy(&dualent, m_pCurrentEntity, sizeof(cl_entity_t));
+		dualent.model = m_pDualModel;
+		m_pCurrentEntity = &dualent;
+		StudioDrawModel(flags | STUDIO_CUSTOM_ENTITY);
+	}
 
 	return 1;
 }
@@ -1491,6 +1505,8 @@ bool CStudioModelRenderer::IsVROffHand()
 		return true;
 	} else if (strcmp(modelname, "models/v_shield_r.mdl") == 0) {
 		return true;
+	} else if (strcmp(modelname, "models/v_elite_l.mdl") == 0) {
+		return true;
 	}
 	return false;
 }
@@ -1505,9 +1521,20 @@ bool CStudioModelRenderer::IsVRShield()
 	return strcmp(m_pCurrentEntity->model->name, "models/v_shield_r.mdl") == 0;
 }
 
+bool CStudioModelRenderer::IsVRDualHandWeapon()
+{
+	char* modelname = m_pCurrentEntity->model->name;
+	if (strcmp(modelname, "models/v_elite.mdl") == 0) {
+		return true;
+	} else if (strcmp(modelname, "models/v_elite_l.mdl") == 0) {
+		return true;
+	}
+	return false;
+}
+
 bool CStudioModelRenderer::IsVRSingleHandWeapon()
 {
-	return IsVRWeapon() && (strcmp(m_pCurrentEntity->model->name, "models/v_elite.mdl") != 0);
+	return IsVRWeapon() && !IsVRDualHandWeapon();
 }
 
 bool CStudioModelRenderer::IsVRWeapon()
@@ -1599,7 +1626,13 @@ void CStudioModelRenderer::UpdateVRHandTransform(vec3_t angles, vec3_t modelpos)
 	offsetMatrix[1][1] = 1;
 	offsetMatrix[2][2] = 1;
 	offsetMatrix[0][3] = -12;
-	offsetMatrix[1][3] = rightHanded * (IsVRShield() ? 5.0f : -5.0f);
+	if (IsVRShield()) {
+		offsetMatrix[1][3] = rightHanded * 5.0f;
+	} else if (IsVRDualHandWeapon()) {
+		offsetMatrix[1][3] = rightHanded * 5.0f;
+	} else {
+		offsetMatrix[1][3] = rightHanded * -5.0f;
+	}
 	offsetMatrix[2][3] = 5;
 	ConcatTransforms(anglesMatrix, offsetMatrix, (*m_protationmatrix));
 
