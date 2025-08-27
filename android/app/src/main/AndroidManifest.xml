@@ -23,6 +23,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Dedicated server -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <!-- Virtual reality support -->
+    <uses-permission android:name="org.khronos.openxr.permission.OPENXR"/>
+    <uses-permission android:name="org.khronos.openxr.permission.OPENXR_SYSTEM"/>
 
     <application
         android:allowBackup="true"
@@ -35,6 +38,7 @@
         <meta-data android:name="com.samsung.android.vr.application.mode" android:value="vr_only"/>
         <meta-data android:name="com.oculus.supportedDevices" android:value="quest2|questpro|quest3|quest3s"/>
         <meta-data android:name="com.oculus.ossplash" android:value="true"/>
+        <meta-data android:name="com.yvr.intent.category.VR" android:value="vr_only" />
         <meta-data android:name="pvr.app.type" android:value="vr"/>
 
         <activity
