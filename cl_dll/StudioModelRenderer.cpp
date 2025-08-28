@@ -1629,7 +1629,7 @@ void CStudioModelRenderer::UpdateVRHandTransform(vec3_t angles, vec3_t modelpos)
 	if (IsVRShield()) {
 		offsetMatrix[1][3] = rightHanded * 5.0f;
 	} else if (IsVRDualHandWeapon()) {
-		offsetMatrix[1][3] = rightHanded * 5.0f;
+		offsetMatrix[1][3] = rightHanded * -5.0f;
 	} else {
 		offsetMatrix[1][3] = rightHanded * -5.0f;
 	}
