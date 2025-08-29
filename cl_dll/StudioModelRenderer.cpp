@@ -857,6 +857,7 @@ int CStudioModelRenderer::StudioDrawModel(int flags)
 	{
 		m_pCurrentEntity = IEngineStudio.GetCurrentEntity();
 	}
+	UpdateVRHandSwap();
 
 	if( g_bHoldingKnife && m_pCurrentEntity == gEngfuncs.GetViewModel() && (flags & STUDIO_RENDER) )
 	{
@@ -971,47 +972,7 @@ int CStudioModelRenderer::StudioDrawModel(int flags)
 		gHUD.cl_righthand->value = iRightHandValue;
 	}
 
-	//Left hand model rendering
-	if (IsVRSingleHandWeapon() && !(flags & STUDIO_CUSTOM_ENTITY))
-	{
-		if (!m_pHandModel || (m_pHandModel->numsurfaces == 0))
-		{
-			m_pHandModel = gEngfuncs.CL_LoadModel( "models/v_hand.mdl", NULL );
-		}
-		static cl_entity_t handent;
-		memcpy(&handent, m_pCurrentEntity, sizeof(cl_entity_t));
-		handent.model = m_pHandModel;
-		m_pCurrentEntity = &handent;
-		m_pCurrentEntity->curstate.sequence = 1;
-		StudioDrawModel(flags | STUDIO_CUSTOM_ENTITY);
-	}
-	//Shield in left hand rendering
-	else if (IsVRShield() && !(flags & STUDIO_CUSTOM_ENTITY))
-	{
-		if (!m_pShieldModel || (m_pShieldModel->numsurfaces == 0))
-		{
-			m_pShieldModel = gEngfuncs.CL_LoadModel( "models/v_shield_r.mdl", NULL );
-		}
-		static cl_entity_t shieldent;
-		memcpy(&shieldent, m_pCurrentEntity, sizeof(cl_entity_t));
-		shieldent.model = m_pShieldModel;
-		m_pCurrentEntity = &shieldent;
-		m_pCurrentEntity->curstate.sequence = 6;
-		StudioDrawModel(flags | STUDIO_CUSTOM_ENTITY);
-	}
-	//Dual weapon in left hand rendering
-	else if (IsVRDualHandWeapon() && !(flags & STUDIO_CUSTOM_ENTITY))
-	{
-		if (!m_pDualModel || (m_pDualModel->numsurfaces == 0))
-		{
-			m_pDualModel = gEngfuncs.CL_LoadModel( "models/v_elite_l.mdl", NULL );
-		}
-		static cl_entity_t dualent;
-		memcpy(&dualent, m_pCurrentEntity, sizeof(cl_entity_t));
-		dualent.model = m_pDualModel;
-		m_pCurrentEntity = &dualent;
-		StudioDrawModel(flags | STUDIO_CUSTOM_ENTITY);
-	}
+	UpdateVRHandModel(flags);
 
 	return 1;
 }
@@ -1610,13 +1571,82 @@ void CStudioModelRenderer::UpdateVRCalibration()
 	}
 }
 
+void CStudioModelRenderer::UpdateVRHandModel(int flags)
+{
+	//Left hand model rendering
+	if (IsVRSingleHandWeapon() && !(flags & STUDIO_CUSTOM_ENTITY))
+	{
+		if (!m_pHandModel || (m_pHandModel->numsurfaces == 0))
+		{
+			m_pHandModel = gEngfuncs.CL_LoadModel( "models/v_hand.mdl", NULL );
+		}
+		static cl_entity_t handent;
+		memcpy(&handent, m_pCurrentEntity, sizeof(cl_entity_t));
+		handent.model = m_pHandModel;
+		m_pCurrentEntity = &handent;
+		m_pCurrentEntity->curstate.sequence = 1;
+		StudioDrawModel(flags | STUDIO_CUSTOM_ENTITY);
+	}
+	//Shield in left hand rendering
+	else if (IsVRShield() && !(flags & STUDIO_CUSTOM_ENTITY))
+	{
+		if (!m_pShieldModel || (m_pShieldModel->numsurfaces == 0))
+		{
+			m_pShieldModel = gEngfuncs.CL_LoadModel( "models/v_shield_r.mdl", NULL );
+		}
+		static cl_entity_t shieldent;
+		memcpy(&shieldent, m_pCurrentEntity, sizeof(cl_entity_t));
+		shieldent.model = m_pShieldModel;
+		m_pCurrentEntity = &shieldent;
+		m_pCurrentEntity->curstate.sequence = 6;
+		StudioDrawModel(flags | STUDIO_CUSTOM_ENTITY);
+	}
+	//Dual weapon in left hand rendering
+	else if (IsVRDualHandWeapon() && !(flags & STUDIO_CUSTOM_ENTITY))
+	{
+		if (!m_pDualModel || (m_pDualModel->numsurfaces == 0))
+		{
+			m_pDualModel = gEngfuncs.CL_LoadModel( "models/v_elite_l.mdl", NULL );
+		}
+		static cl_entity_t dualent;
+		memcpy(&dualent, m_pCurrentEntity, sizeof(cl_entity_t));
+		dualent.model = m_pDualModel;
+		m_pCurrentEntity = &dualent;
+		StudioDrawModel(flags | STUDIO_CUSTOM_ENTITY);
+	}
+}
+
+void CStudioModelRenderer::UpdateVRHandSwap()
+{
+	if (IsVRDualHandWeapon())
+	{
+		static bool isLeft = true;
+		if ((m_pCurrentEntity->curstate.sequence > 0) && (m_pCurrentEntity->curstate.sequence <= 6)) isLeft = false;
+		if ((m_pCurrentEntity->curstate.sequence > 6) && (m_pCurrentEntity->curstate.sequence <= 12)) isLeft = true;
+		gEngfuncs.Cvar_SetValue("vr_hand_swap", isLeft ? 1 : 0);
+	}
+	else
+	{
+		gEngfuncs.Cvar_SetValue("vr_hand_swap", 0);
+	}
+}
+
 void CStudioModelRenderer::UpdateVRHandTransform(vec3_t angles, vec3_t modelpos)
 {
 	// Apply angles
 	static float anglesMatrix[3][4];
-	angles[PITCH] = gEngfuncs.pfnGetCvarFloat("vr_hand_pitch");
-	angles[YAW] += gEngfuncs.pfnGetCvarFloat("vr_hand_yaw");
-	angles[ROLL] = gEngfuncs.pfnGetCvarFloat("vr_hand_roll");
+	if (gEngfuncs.pfnGetCvarFloat("vr_hand_swap") > 0.5f)
+	{
+		angles[ROLL] += gEngfuncs.pfnGetCvarFloat("vr_weapon_roll");
+		angles[PITCH] -= gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_pitch");
+		angles[YAW] += gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_yaw");
+	}
+	else
+	{
+		angles[PITCH] = gEngfuncs.pfnGetCvarFloat("vr_hand_pitch");
+		angles[YAW] += gEngfuncs.pfnGetCvarFloat("vr_hand_yaw");
+		angles[ROLL] = gEngfuncs.pfnGetCvarFloat("vr_hand_roll");
+	}
 	AngleMatrix(angles, anglesMatrix);
 
 	// Get pivot point offset and scale
@@ -1640,6 +1670,12 @@ void CStudioModelRenderer::UpdateVRHandTransform(vec3_t angles, vec3_t modelpos)
 	float dx = gEngfuncs.pfnGetCvarFloat("vr_hand_x");
 	float dy = gEngfuncs.pfnGetCvarFloat("vr_hand_y");
 	float dz = gEngfuncs.pfnGetCvarFloat("vr_hand_z");
+	if (gEngfuncs.pfnGetCvarFloat("vr_hand_swap") > 0.5f)
+	{
+		dx = gEngfuncs.pfnGetCvarFloat("vr_weapon_x");
+		dy = gEngfuncs.pfnGetCvarFloat("vr_weapon_y");
+		dz = gEngfuncs.pfnGetCvarFloat("vr_weapon_z");
+	}
 	vec3_t fwd = {m_vNormal[0], m_vNormal[1], 0.0f};
 	vec3_t right = {m_vRight[0], m_vRight[1], 0.0f};
 	VectorNormalize(fwd);
@@ -1665,9 +1701,18 @@ void CStudioModelRenderer::UpdateVRWeaponTransform(vec3_t angles, vec3_t modelpo
 {
 	// Apply angles
 	static float anglesMatrix[3][4];
-	angles[ROLL] += gEngfuncs.pfnGetCvarFloat("vr_weapon_roll");
-	angles[PITCH] -= gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_pitch");
-	angles[YAW] += gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_yaw");
+	if (gEngfuncs.pfnGetCvarFloat("vr_hand_swap") > 0.5f)
+	{
+		angles[PITCH] = gEngfuncs.pfnGetCvarFloat("vr_hand_pitch");
+		angles[YAW] += gEngfuncs.pfnGetCvarFloat("vr_hand_yaw");
+		angles[ROLL] = gEngfuncs.pfnGetCvarFloat("vr_hand_roll");
+	}
+	else
+	{
+		angles[ROLL] += gEngfuncs.pfnGetCvarFloat("vr_weapon_roll");
+		angles[PITCH] -= gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_pitch");
+		angles[YAW] += gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_yaw");
+	}
 	AngleMatrix(angles, anglesMatrix);
 
 	// Get pivot point offset and scale
@@ -1686,6 +1731,12 @@ void CStudioModelRenderer::UpdateVRWeaponTransform(vec3_t angles, vec3_t modelpo
 	float dx = gEngfuncs.pfnGetCvarFloat("vr_weapon_x");
 	float dy = gEngfuncs.pfnGetCvarFloat("vr_weapon_y");
 	float dz = gEngfuncs.pfnGetCvarFloat("vr_weapon_z");
+	if (gEngfuncs.pfnGetCvarFloat("vr_hand_swap") > 0.5f)
+	{
+		dx = gEngfuncs.pfnGetCvarFloat("vr_hand_x");
+		dy = gEngfuncs.pfnGetCvarFloat("vr_hand_y");
+		dz = gEngfuncs.pfnGetCvarFloat("vr_hand_z");
+	}
 	vec3_t fwd = {m_vNormal[0], m_vNormal[1], 0.0f};
 	vec3_t right = {m_vRight[0], m_vRight[1], 0.0f};
 	VectorNormalize(fwd);

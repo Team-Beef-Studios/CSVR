@@ -64,6 +64,8 @@ private:
 	bool IsVRSingleHandWeapon();
 	bool IsVRWeapon();
 	void UpdateVRCalibration();
+	void UpdateVRHandModel(int flags);
+	void UpdateVRHandSwap();
 	void UpdateVRHandTransform(vec3_t angles, vec3_t modelpos);
 	void UpdateVRWeaponTransform(vec3_t angles, vec3_t modelpos);
 
