@@ -1635,11 +1635,16 @@ void CStudioModelRenderer::UpdateVRHandTransform(vec3_t angles, vec3_t modelpos)
 {
 	// Apply angles
 	static float anglesMatrix[3][4];
+	float rightHanded = gEngfuncs.pfnGetCvarFloat("cl_righthand") * 2 - 1;
 	if (gEngfuncs.pfnGetCvarFloat("vr_hand_swap") > 0.5f)
 	{
 		angles[ROLL] += gEngfuncs.pfnGetCvarFloat("vr_weapon_roll");
 		angles[PITCH] -= gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_pitch");
-		angles[YAW] += gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_yaw");
+		angles[YAW] -= rightHanded * gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_yaw");
+		if (rightHanded > 0)
+		{
+			angles[YAW] += 5;
+		}
 	}
 	else
 	{
@@ -1650,20 +1655,22 @@ void CStudioModelRenderer::UpdateVRHandTransform(vec3_t angles, vec3_t modelpos)
 	AngleMatrix(angles, anglesMatrix);
 
 	// Get pivot point offset and scale
-	float rightHanded = gEngfuncs.pfnGetCvarFloat("cl_righthand") * 2 - 1;
+	float scale = gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_scale") / 10.0f;
 	static float offsetMatrix[3][4];
 	offsetMatrix[0][0] = 1;
 	offsetMatrix[1][1] = 1;
 	offsetMatrix[2][2] = 1;
 	offsetMatrix[0][3] = -12;
+	offsetMatrix[2][3] = 5;
 	if (IsVRShield()) {
 		offsetMatrix[1][3] = rightHanded * 5.0f;
 	} else if (IsVRDualHandWeapon()) {
-		offsetMatrix[1][3] = rightHanded * -5.0f;
+		offsetMatrix[0][3] = gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_y") * scale;
+		offsetMatrix[1][3] = -rightHanded * gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_x") * scale;
+		offsetMatrix[2][3] = gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_z") * scale;
 	} else {
 		offsetMatrix[1][3] = rightHanded * -5.0f;
 	}
-	offsetMatrix[2][3] = 5;
 	ConcatTransforms(anglesMatrix, offsetMatrix, (*m_protationmatrix));
 
 	// Weapon motion tracking
@@ -1701,6 +1708,7 @@ void CStudioModelRenderer::UpdateVRWeaponTransform(vec3_t angles, vec3_t modelpo
 {
 	// Apply angles
 	static float anglesMatrix[3][4];
+	float rightHanded = gEngfuncs.pfnGetCvarFloat("cl_righthand") * 2 - 1;
 	if (gEngfuncs.pfnGetCvarFloat("vr_hand_swap") > 0.5f)
 	{
 		angles[PITCH] = gEngfuncs.pfnGetCvarFloat("vr_hand_pitch");
@@ -1711,13 +1719,16 @@ void CStudioModelRenderer::UpdateVRWeaponTransform(vec3_t angles, vec3_t modelpo
 	{
 		angles[ROLL] += gEngfuncs.pfnGetCvarFloat("vr_weapon_roll");
 		angles[PITCH] -= gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_pitch");
-		angles[YAW] += gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_yaw");
+		angles[YAW] += rightHanded * gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_yaw");
+		if (rightHanded < 0)
+		{
+			angles[YAW] += 5;
+		}
 	}
 	AngleMatrix(angles, anglesMatrix);
 
 	// Get pivot point offset and scale
 	float scale = gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_scale") / 10.0f;
-	float rightHanded = gEngfuncs.pfnGetCvarFloat("cl_righthand") * 2 - 1;
 	static float offsetMatrix[3][4];
 	offsetMatrix[0][0] = scale;
 	offsetMatrix[1][1] = scale;
