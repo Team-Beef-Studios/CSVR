@@ -1584,7 +1584,7 @@ void CStudioModelRenderer::UpdateVRHandModel(int flags)
 		memcpy(&handent, m_pCurrentEntity, sizeof(cl_entity_t));
 		handent.model = m_pHandModel;
 		m_pCurrentEntity = &handent;
-		m_pCurrentEntity->curstate.sequence = 1;
+		m_pCurrentEntity->curstate.sequence = gEngfuncs.pfnGetCvarFloat("vr_hand_active") ? 1 : 0;
 		StudioDrawModel(flags | STUDIO_CUSTOM_ENTITY);
 	}
 	//Shield in left hand rendering
