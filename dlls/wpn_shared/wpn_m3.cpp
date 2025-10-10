@@ -17,6 +17,7 @@
 #include "cbase.h"
 #include "player.h"
 #include "weapons.h"
+#include <hud_iface.h>
 
 LINK_ENTITY_TO_CLASS(weapon_m3, CM3)
 
@@ -123,6 +124,8 @@ void CM3::PrimaryAttack()
 #ifndef CLIENT_DLL
 	m_pPlayer->FireBullets(9, vecSrc, vecAiming, M3_CONE_VECTOR, 3000, BULLET_PLAYER_BUCKSHOT, 0);
 #endif
+
+	gEngfuncs.Cvar_SetValue("vr_haptics_weapon", 0.25f);
 
 #ifdef CLIENT_WEAPONS
 	flag = FEV_NOTHOST;

@@ -535,6 +535,8 @@ Vector CBaseEntity::FireBullets3 ( Vector vecSrc, Vector vecDirShooting, float f
 		while (z > 1);
 	}
 
+	gEngfuncs.Cvar_SetValue("vr_haptics_weapon", 0.15f);
+
 	return Vector(x * flSpread, y * flSpread, 0.0f);
 }
 

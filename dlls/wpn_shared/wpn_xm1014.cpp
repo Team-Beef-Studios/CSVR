@@ -17,6 +17,7 @@
 #include "cbase.h"
 #include "player.h"
 #include "weapons.h"
+#include <hud_iface.h>
 
 LINK_ENTITY_TO_CLASS(weapon_xm1014, CXM1014)
 
@@ -120,6 +121,8 @@ void CXM1014::PrimaryAttack()
 #ifndef CLIENT_DLL
 	m_pPlayer->FireBullets(6, vecSrc, vecAiming, XM1014_CONE_VECTOR, 3048, BULLET_PLAYER_BUCKSHOT, 0);
 #endif
+
+	gEngfuncs.Cvar_SetValue("vr_haptics_weapon", 0.25f);
 
 #ifdef CLIENT_WEAPONS
 	flag = FEV_NOTHOST;
