@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 
+import com.drbeef.modules.Haptics;
+
 import org.libsdl.app.SDLActivity;
 
 import java.io.File;
@@ -68,6 +70,7 @@ public class XashActivity extends SDLActivity {
         }
         copyAsset("vr_weapons.cfg", new File(models, "vr_weapons.cfg"), false);
         nativeSetenv("xr_manufacturer", Build.MANUFACTURER.toUpperCase());
+        Haptics.onCreate(this);
     }
 
     @Override
@@ -78,9 +81,22 @@ public class XashActivity extends SDLActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        Haptics.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Haptics.onResume();
+    }
+
+    @Override
     public void onDestroy()
     {
         super.onDestroy();
+        Haptics.onDestroy();
 
         // Now that we don't exit from native code, we need to exit here, resetting
         // application state (actually global variables that we don't cleanup on exit)

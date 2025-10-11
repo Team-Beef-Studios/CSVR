@@ -85,3 +85,7 @@ android {
         }
     }
 }
+
+dependencies {
+    implementation(files("src/main/libs/haptic_service.aar"))
+}
