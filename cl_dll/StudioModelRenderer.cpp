@@ -1620,10 +1620,20 @@ void CStudioModelRenderer::UpdateVRHandSwap()
 {
 	if (IsVRDualHandWeapon())
 	{
+		static int count = 0;
 		static bool isLeft = true;
+		static bool wasLeft = true;
 		if ((m_pCurrentEntity->curstate.sequence > 0) && (m_pCurrentEntity->curstate.sequence <= 6)) isLeft = false;
 		if ((m_pCurrentEntity->curstate.sequence > 6) && (m_pCurrentEntity->curstate.sequence <= 12)) isLeft = true;
-		gEngfuncs.Cvar_SetValue("vr_hand_swap", isLeft ? 1 : 0);
+		gEngfuncs.Cvar_SetValue("vr_hand_swap", wasLeft ? 1 : 0);
+		if (wasLeft != isLeft) {
+			count++;
+			if (count > 30) {
+				wasLeft = isLeft;
+			}
+		} else {
+			count = 0;
+		}
 	}
 	else
 	{
