@@ -458,6 +458,7 @@ int CHudSpectator::Draw(float flTime)
 	float * color;
 
 	// draw only in spectator mode
+	gEngfuncs.Cvar_SetValue("vr_spectator", g_iUser1);
 	if ( !g_iUser1  )
 		return 0;
 

@@ -453,7 +453,7 @@ void IN_Attack2Up(void) {KeyUp(&in_attack2);}
 void IN_UseDown (void)
 {
 	KeyDown(&in_use);
-	gHUD.m_Spectator.HandleButtonsDown( IN_USE );
+	//gHUD.m_Spectator.HandleButtonsDown( IN_USE ); //Not in VR
 }
 void IN_UseUp (void) {KeyUp(&in_use);}
 void IN_JumpDown (void)
@@ -466,7 +466,7 @@ void IN_JumpUp (void) {KeyUp(&in_jump);}
 void IN_DuckDown(void)
 {
 	KeyDown(&in_duck);
-	gHUD.m_Spectator.HandleButtonsDown( IN_DUCK );
+	//gHUD.m_Spectator.HandleButtonsDown( IN_DUCK ); //Not in VR
 
 }
 void IN_DuckUp(void) {KeyUp(&in_duck);}
