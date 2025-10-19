@@ -1,5 +1,5 @@
 
-package com.drbeef.modules;
+package com.drbeef.externalhapticsservice;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,10 +8,7 @@ import android.util.Log;
 import android.util.Pair;
 import java.util.Vector;
 
-import com.drbeef.externalhapticsservice.HapticsConstants;
-import com.drbeef.externalhapticsservice.HapticServiceClient;
-
-public class Haptics
+public class HapticsAPI
 {
 	private static final Vector<HapticServiceClient> externalHapticsServiceClients = new Vector<>();
 
