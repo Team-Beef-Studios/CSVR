@@ -1711,6 +1711,7 @@ void CStudioModelRenderer::UpdateVRHandTransform(vec3_t angles, vec3_t modelpos)
 		modelpos[0] -= gEngfuncs.pfnGetCvarFloat("vr_offset_x");
 		modelpos[1] -= gEngfuncs.pfnGetCvarFloat("vr_offset_y");
 	}
+	modelpos[2] -= gEngfuncs.pfnGetCvarFloat("vr_offset_z");
 
 	// Apply transform
 	(*m_protationmatrix)[0][3] += modelpos[0];
@@ -1776,6 +1777,7 @@ void CStudioModelRenderer::UpdateVRWeaponTransform(vec3_t angles, vec3_t modelpo
 		modelpos[0] -= gEngfuncs.pfnGetCvarFloat("vr_offset_x");
 		modelpos[1] -= gEngfuncs.pfnGetCvarFloat("vr_offset_y");
 	}
+	modelpos[2] -= gEngfuncs.pfnGetCvarFloat("vr_offset_z");
 
 	// Apply transform
 	(*m_protationmatrix)[0][3] += modelpos[0];
