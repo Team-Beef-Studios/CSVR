@@ -47,7 +47,7 @@ public class HapticsAPI
 		}
 	}
 
-	public static void onPause() {
+	public static void disable() {
 
 		for (HapticServiceClient externalHapticsServiceClient : externalHapticsServiceClients) {
 
@@ -61,7 +61,7 @@ public class HapticsAPI
 		}
 	}
 
-	public static void onResume() {
+	public static void enable() {
 
 		for (HapticServiceClient externalHapticsServiceClient : externalHapticsServiceClients) {
 
@@ -82,8 +82,7 @@ public class HapticsAPI
 			if (externalHapticsServiceClient.hasService()) {
 				try {
 					externalHapticsServiceClient.getHapticsService().hapticEvent(APPLICATION, event, position, flags, intensity, angle, yHeight);
-				}
-				catch (RemoteException r)
+				} catch (RemoteException r)
 				{
 					Log.v(APPLICATION, r.toString());
 				}

@@ -81,18 +81,6 @@ public class XashActivity extends SDLActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        HapticsAPI.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        HapticsAPI.onResume();
-    }
-
-    @Override
     public void onDestroy()
     {
         super.onDestroy();
