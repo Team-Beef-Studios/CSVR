@@ -509,7 +509,7 @@ int CHudSpectator::Draw(float flTime)
 	if ( g_iUser1 < OBS_MAP_FREE  )
 		return 1;
 	
-	if ( !m_drawnames->value )
+	if ( !m_drawnames->value || true ) //NO names in VR
 		return 1;
 	
 	// make sure we have player info
