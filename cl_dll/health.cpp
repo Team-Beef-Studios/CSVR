@@ -306,6 +306,9 @@ void CHudHealth::CalcDamageDirection( Vector vecFrom )
 	front = DotProduct (vecFrom, right);
 	side = DotProduct (vecFrom, forward);
 
+	float yaw = atan2(front, side);
+	gEngfuncs.Cvar_SetValue("vr_haptics_yaw", yaw);
+
 	if (flDistToTarget <= 50)
 	{
 		for( int i = 0; i < 4; i++ )

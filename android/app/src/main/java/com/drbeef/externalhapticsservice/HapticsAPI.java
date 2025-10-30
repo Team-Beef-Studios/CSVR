@@ -23,7 +23,7 @@ public class HapticsAPI
 		externalHapticsServiceDetails.add(Pair.create(HapticsConstants.FORCETUBE_PACKAGE, HapticsConstants.FORCETUBE_ACTION_FILTER));
 	}
 
-	private static final String APPLICATION = "Haptics";
+	private static final String APPLICATION = "Doom3Quest";
 
 	public static void onCreate(Context context) {
 		for (Pair<String, String> serviceDetail : externalHapticsServiceDetails) {
