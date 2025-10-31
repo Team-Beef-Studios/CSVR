@@ -1582,11 +1582,11 @@ void CHudAmmo::DrawCrosshair()
 
 	weaponid = m_pWeapon->iId;
 
-	if ( weaponid == WEAPON_AWP
+	/*if ( weaponid == WEAPON_AWP
 	     || weaponid == WEAPON_SCOUT
 	     || weaponid == WEAPON_SG550
 	     || weaponid == WEAPON_G3SG1 )
-		return;
+		return;*/
 
 	if ( g_iWeaponFlags & WPNSTATE_SHIELD_DRAWN )
 		return;
