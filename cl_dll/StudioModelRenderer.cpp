@@ -1504,9 +1504,9 @@ bool CStudioModelRenderer::IsVRSingleHandWeapon()
 
 bool CStudioModelRenderer::IsVRWeapon()
 {
-	char* prefixWeapon = "models/v_";
+	char* prefixWeapon = "/v_";
 	char* modelname = m_pCurrentEntity->model->name;
-	return strncmp(modelname, prefixWeapon, strlen(prefixWeapon)) == 0;
+	return strstr(modelname, prefixWeapon) != nullptr;
 }
 
 void CStudioModelRenderer::UpdateVRCalibration()
