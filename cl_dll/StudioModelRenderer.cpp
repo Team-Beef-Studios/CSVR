@@ -976,10 +976,7 @@ int CStudioModelRenderer::StudioDrawModel(int flags)
 		gHUD.cl_righthand->value = iRightHandValue;
 	}
 
-	if( !IsVRModdedWeapon() )
-	{
-		UpdateVRHandModel(flags);
-	}
+	UpdateVRHandModel(flags);
 
 	return 1;
 }
@@ -1588,7 +1585,7 @@ void CStudioModelRenderer::UpdateVRCalibration()
 void CStudioModelRenderer::UpdateVRHandModel(int flags)
 {
 	//Left hand model rendering
-	if (IsVRSingleHandWeapon() && !(flags & STUDIO_CUSTOM_ENTITY))
+	if (IsVRSingleHandWeapon() && !IsVRModdedWeapon() && !(flags & STUDIO_CUSTOM_ENTITY))
 	{
 		if (!m_pHandModel || (m_pHandModel->numsurfaces == 0))
 		{
