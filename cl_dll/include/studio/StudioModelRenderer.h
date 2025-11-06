@@ -61,6 +61,7 @@ private:
 	bool IsVROffHand();
 	bool IsVRShield();
 	bool IsVRDualHandWeapon();
+	bool IsVRModdedWeapon();
 	bool IsVRSingleHandWeapon();
 	bool IsVRWeapon();
 	void UpdateVRCalibration();

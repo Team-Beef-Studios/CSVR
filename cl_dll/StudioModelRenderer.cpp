@@ -976,7 +976,10 @@ int CStudioModelRenderer::StudioDrawModel(int flags)
 		gHUD.cl_righthand->value = iRightHandValue;
 	}
 
-	UpdateVRHandModel(flags);
+	if( !IsVRModdedWeapon() )
+	{
+		UpdateVRHandModel(flags);
+	}
 
 	return 1;
 }
@@ -1495,6 +1498,13 @@ bool CStudioModelRenderer::IsVRDualHandWeapon()
 		return true;
 	}
 	return false;
+}
+
+bool CStudioModelRenderer::IsVRModdedWeapon()
+{
+	char* prefixWeapon = "models/v_";
+	char* modelname = m_pCurrentEntity->model->name;
+	return IsVRWeapon() && (strncmp(modelname, prefixWeapon, strlen(prefixWeapon)) != 0);
 }
 
 bool CStudioModelRenderer::IsVRSingleHandWeapon()
