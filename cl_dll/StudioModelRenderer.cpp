@@ -1499,7 +1499,7 @@ bool CStudioModelRenderer::IsVRDualHandWeapon()
 
 bool CStudioModelRenderer::IsVRSingleHandWeapon()
 {
-	return IsVRWeapon() && !IsVRDualHandWeapon();
+	return IsVRWeapon() && !IsVRDualHandWeapon() && !IsVRShield();
 }
 
 bool CStudioModelRenderer::IsVRWeapon()
