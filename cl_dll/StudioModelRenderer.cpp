@@ -426,8 +426,7 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 		(*m_protationmatrix)[1][3] = modelpos[1];
 		(*m_protationmatrix)[2][3] = modelpos[2];
 	} else if (IsVROffHand()) {
-		modelpos[0] = m_vRenderOrigin[0];
-		modelpos[1] = m_vRenderOrigin[1];
+		VectorCopy(m_vRenderOrigin, modelpos);
 		UpdateVRHandTransform(angles, modelpos);
 	} else if (IsVRShield() || IsVRWeapon()) {
 		if (gEngfuncs.pfnGetCvarFloat("vr_shielded") > 0) {
