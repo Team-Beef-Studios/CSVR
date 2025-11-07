@@ -1540,23 +1540,23 @@ void CStudioModelRenderer::UpdateVRCalibration()
 		for (std::string& s : data) {
 			fprintf(fos, "%s\n", s.c_str());
 		}
-		fprintf(fos, "%s,%d,%d,%d,%d,%d,%d", modelname,
-				(int)gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_x"),
-				(int)gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_y"),
-				(int)gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_z"),
-				(int)gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_pitch"),
-				(int)gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_yaw"),
-				(int)gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_scale"));
+		fprintf(fos, "%s,%.1f,%.1f,%.1f,%.1f,%.1f,%.1f", modelname,
+				gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_x"),
+				gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_y"),
+				gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_z"),
+				gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_pitch"),
+				gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_yaw"),
+				gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_scale"));
 		fclose(fos);
 		gEngfuncs.Cvar_SetValue("vr_weapon_calibration_update", 0);
 	} else if (strcmp(gEngfuncs.pfnGetCvarString("vr_weapon_pivot_name"), modelname) != 0) {
 		// Default calibration if no calibration found
-		int pivot_x = 5;
-		int pivot_y = -12;
-		int pivot_z = 7;
-		int pivot_pitch = 1;
-		int pivot_yaw = 2;
-		int pivot_scale = 10;
+		float pivot_x = 5;
+		float pivot_y = -12;
+		float pivot_z = 7;
+		float pivot_pitch = 1;
+		float pivot_yaw = 2;
+		float pivot_scale = 10;
 
 		// Read existing calibrations and try to find the correct one
 		std::string line;
@@ -1565,7 +1565,7 @@ void CStudioModelRenderer::UpdateVRCalibration()
 		if (fin.is_open()) {
 			while (std::getline(fin, line)) {
 				if (strncmp(line.c_str(), modelname, strlen(modelname)) == 0) {
-					sscanf(line.c_str(), "%[^,],%d,%d,%d,%d,%d,%d", modelname,
+					sscanf(line.c_str(), "%[^,],%f,%f,%f,%f,%f,%f", modelname,
 						   &pivot_x, &pivot_y, &pivot_z, &pivot_pitch, &pivot_yaw, &pivot_scale);
 				}
 			}
