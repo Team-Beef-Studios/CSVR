@@ -1664,17 +1664,22 @@ void CStudioModelRenderer::UpdateVRHandTransform(vec3_t angles, vec3_t modelpos)
 		angles[YAW] += gEngfuncs.pfnGetCvarFloat("vr_hand_yaw");
 		angles[ROLL] = gEngfuncs.pfnGetCvarFloat("vr_hand_roll");
 	}
-	AngleMatrix(angles, anglesMatrix);
 
 	// Get pivot point offset and scale
 	static float offsetMatrix[3][4];
 	offsetMatrix[0][0] = 1;
 	offsetMatrix[1][1] = 1;
 	offsetMatrix[2][2] = 1;
-	offsetMatrix[0][3] = -12;
+	offsetMatrix[0][3] = -10;
 	offsetMatrix[2][3] = 5;
 	if (IsVRShield()) {
 		offsetMatrix[1][3] = rightHanded * 5.0f;
+		offsetMatrix[2][3] = 8.0f;
+		if (gEngfuncs.pfnGetCvarFloat("vr_shielded") < 0.5f) {
+			offsetMatrix[0][3] = -7.0f;
+			offsetMatrix[1][3] = rightHanded * 7.0f;
+			angles[YAW] += 45.0f;
+		}
 	} else if (IsVRDualHandWeapon()) {
 		float scale = gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_scale") / 10.0f;
 		offsetMatrix[0][3] = gEngfuncs.pfnGetCvarFloat("vr_weapon_pivot_y") * scale;
@@ -1683,6 +1688,7 @@ void CStudioModelRenderer::UpdateVRHandTransform(vec3_t angles, vec3_t modelpos)
 	} else {
 		offsetMatrix[1][3] = rightHanded * -5.0f;
 	}
+	AngleMatrix(angles, anglesMatrix);
 	ConcatTransforms(anglesMatrix, offsetMatrix, (*m_protationmatrix));
 
 	// Weapon motion tracking
