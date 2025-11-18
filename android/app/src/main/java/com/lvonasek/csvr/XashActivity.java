@@ -19,8 +19,10 @@ import com.drbeef.externalhapticsservice.HapticsAPI;
 import org.libsdl.app.SDLActivity;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.Scanner;
 
 public class XashActivity extends SDLActivity {
     private static Activity activity;
@@ -62,13 +64,30 @@ public class XashActivity extends SDLActivity {
             e.printStackTrace();
         }
 
+        // Check config
+        boolean restoreModels = true;
+        try {
+            File config = new File(root, "cstrike/config.cfg");
+            FileInputStream fis = new FileInputStream(config);
+            Scanner sc = new Scanner(fis);
+            while (sc.hasNext()) {
+                String line = sc.nextLine();
+                if (line.startsWith("vr_weapon_restore \"0\"")) {
+                    restoreModels = false;
+                }
+            }
+            sc.close();
+            fis.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // Copy custom weapon models
         File models = new File(root, "cstrike/models");
-        if (!new File(models, "nocopy").exists()) {
+        if (restoreModels) {
             copyAssets("models", models);
             copyAssets("models/shield", new File(models, "shield"));
         }
-        copyAsset("vr_weapons.cfg", new File(models, "vr_weapons.cfg"), false);
         nativeSetenv("xr_manufacturer", Build.MANUFACTURER.toUpperCase());
         HapticsAPI.onCreate(this);
     }
