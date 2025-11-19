@@ -69,7 +69,7 @@ int CHudMOTD :: Draw( float fTime )
 	if( !m_bShow )
 		return 1;
 
-	if( cl_hide_motd->value )
+	if( cl_hide_motd->value || true )
 	{
 		Reset();
 		return 1;
