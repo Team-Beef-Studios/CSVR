@@ -421,7 +421,11 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 	}
 
 	// VR weapon transform
-	if (gEngfuncs.pfnGetCvarFloat("vr_spectator") > 0.5f) {
+	if ((IsVROffHand() || IsVRShield() || IsVRWeapon()) && (gEngfuncs.pfnGetCvarFloat("vr_gamemode") < 0.5f)) {
+		(*m_protationmatrix)[0][3] = INT_MAX;
+		(*m_protationmatrix)[1][3] = INT_MAX;
+		(*m_protationmatrix)[2][3] = INT_MAX;
+	} else if (gEngfuncs.pfnGetCvarFloat("vr_spectator") > 0.5f) {
 		(*m_protationmatrix)[0][3] = modelpos[0];
 		(*m_protationmatrix)[1][3] = modelpos[1];
 		(*m_protationmatrix)[2][3] = modelpos[2];
