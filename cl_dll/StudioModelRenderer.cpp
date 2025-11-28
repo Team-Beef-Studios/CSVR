@@ -1597,10 +1597,12 @@ void CStudioModelRenderer::UpdateVRHandModel(int flags)
 			m_pHandModel = gEngfuncs.CL_LoadModel( "models/v_hand.mdl", NULL );
 		}
 		static cl_entity_t handent;
+		bool active = gEngfuncs.pfnGetCvarFloat("vr_hand_active") > 0.5f;
+		bool click = gEngfuncs.pfnGetCvarFloat("vr_hand_click") > 0.5f;
 		memcpy(&handent, m_pCurrentEntity, sizeof(cl_entity_t));
 		handent.model = m_pHandModel;
 		m_pCurrentEntity = &handent;
-		m_pCurrentEntity->curstate.sequence = gEngfuncs.pfnGetCvarFloat("vr_hand_active") ? 1 : 0;
+		m_pCurrentEntity->curstate.sequence = active || click ? 1 : 0;
 		StudioDrawModel(flags | STUDIO_CUSTOM_ENTITY);
 	}
 	//Shield in left hand rendering
