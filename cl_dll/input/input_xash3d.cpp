@@ -141,10 +141,12 @@ void IN_Move( float frametime, usercmd_t *cmd )
 	if( gHUD.m_iIntermission )
 		return; // we can't move during intermission
 
+	cl_entity_t *pplayer = gEngfuncs.GetLocalPlayer();
+	if( pplayer )
+		gEngfuncs.Cvar_SetValue("vr_ladder", pplayer->curstate.movetype == MOVETYPE_FLY ? 1 : 0);
 
 	if( cl_laddermode->value != 2 )
 	{
-		cl_entity_t *pplayer = gEngfuncs.GetLocalPlayer();
 		if( pplayer )
 			bLadder = pplayer->curstate.movetype == MOVETYPE_FLY;
 	}
