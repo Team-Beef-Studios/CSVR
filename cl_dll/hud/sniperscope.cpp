@@ -81,7 +81,7 @@ inline void DrawTexture( int tex, float x1, float y1, float x2, float y2 )
 
 int CHudSniperScope::Draw(float flTime)
 {
-	if(gHUD.m_iFOV > 40)
+	if((gHUD.m_iFOV > 40) || (gEngfuncs.pfnGetCvarFloat("vr_zoomfix") > 0.5f))
 		return 1;
 
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransColor);

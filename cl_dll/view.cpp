@@ -898,7 +898,7 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 	}
 
 	// Don't allow viewmodel, if we are in sniper scope
-	if( gHUD.m_iFOV <= 40 )
+	if(( gHUD.m_iFOV <= 40 ) && (gEngfuncs.pfnGetCvarFloat("vr_zoomfix") < 0.5f))
 		view->model = NULL;
 
 	// Add in the punchangle, if any

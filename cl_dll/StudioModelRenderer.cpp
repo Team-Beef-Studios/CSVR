@@ -1597,12 +1597,7 @@ void CStudioModelRenderer::UpdateVRHandModel(int flags)
 			m_pHandModel = gEngfuncs.CL_LoadModel( "models/v_hand.mdl", NULL );
 		}
 		static cl_entity_t handent;
-		bool armStretching = gEngfuncs.pfnGetCvarFloat("vr_motion_activation") > 1.5f;
-		bool buttonActivator1 = fabs(gEngfuncs.pfnGetCvarFloat("vr_motion_activation") - 1) < 0.1f;
-		bool buttonActivator2 = fabs(gEngfuncs.pfnGetCvarFloat("vr_motion_activation") - 3) < 0.1f;
-		bool handClick = gEngfuncs.pfnGetCvarFloat("vr_hand_click") > 0.5f;
-		bool handStretch = gEngfuncs.pfnGetCvarFloat("vr_hand_stretch") > 0.5f;
-		bool handActive = ((buttonActivator1 || buttonActivator2) && handClick) || (armStretching && handStretch);
+		bool handActive = gEngfuncs.pfnGetCvarFloat("vr_hand_active") > 0.5f;
 		memcpy(&handent, m_pCurrentEntity, sizeof(cl_entity_t));
 		handent.model = m_pHandModel;
 		m_pCurrentEntity = &handent;

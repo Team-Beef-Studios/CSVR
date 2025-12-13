@@ -1021,7 +1021,7 @@ int CHudAmmo::Draw(float flTime)
 		return 1;
 
 	// place it here, so pretty dynamic crosshair will work even in spectator!
-	if( gHUD.m_iFOV > 40 )
+	if(( gHUD.m_iFOV > 40 ) || (gEngfuncs.pfnGetCvarFloat("vr_zoomfix") > 0.5f))
 	{
 		HideCrosshair(); // hide static
 
