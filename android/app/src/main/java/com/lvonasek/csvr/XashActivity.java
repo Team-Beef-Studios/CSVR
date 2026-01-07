@@ -28,6 +28,7 @@ public class XashActivity extends SDLActivity {
     private static Activity activity;
     private boolean mUseVolumeKeys;
     private String mPackageName;
+    private String mGame = "cstrike";
     private static final String TAG = "CSVR";
 
     private static final int PERMISSION_CODE = 16;
@@ -64,6 +65,23 @@ public class XashActivity extends SDLActivity {
             e.printStackTrace();
         }
 
+        // Detect which game should be started
+        try {
+            File config = new File(root, "csvr.txt");
+            if (!config.exists()) {
+                FileOutputStream fos = new FileOutputStream(config);
+                fos.write(mGame.getBytes());
+                fos.close();
+            }
+            FileInputStream fis = new FileInputStream(config);
+            Scanner sc = new Scanner(fis);
+            mGame = sc.nextLine();
+            sc.close();
+            fis.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // Check config
         boolean restoreModels = true;
         try {
@@ -83,7 +101,7 @@ public class XashActivity extends SDLActivity {
         }
 
         // Copy custom weapon models
-        File models = new File(root, "cstrike/models");
+        File models = new File(root, mGame + "/models");
         if (restoreModels) {
             copyAssets("models", models);
             copyAssets("models/shield", new File(models, "shield"));
@@ -179,7 +197,7 @@ public class XashActivity extends SDLActivity {
     @Override
     protected String[] getArguments() {
         String gamedir = getIntent().getStringExtra("gamedir");
-        if (gamedir == null) gamedir = "cstrike";
+        if (gamedir == null) gamedir = mGame;
         nativeSetenv("XASH3D_GAME", gamedir);
 
         String gamelibdir = getIntent().getStringExtra("gamelibdir");
