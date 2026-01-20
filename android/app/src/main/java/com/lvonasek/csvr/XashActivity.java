@@ -106,6 +106,7 @@ public class XashActivity extends SDLActivity {
             copyAssets("models", models);
             copyAssets("models/shield", new File(models, "shield"));
         }
+        copyAssets("sprites", new File(root, mGame + "/sprites"));
         nativeSetenv("xr_manufacturer", Build.MANUFACTURER.toUpperCase());
         HapticsAPI.onCreate(this);
     }
